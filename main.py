@@ -1,6 +1,3 @@
-!pip install pytz
-!pip install bs4
-
 import requests
 from datetime import datetime, timedelta
 import pytz
