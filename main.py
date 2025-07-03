@@ -330,7 +330,8 @@ def hh_parsing():
                             "skills": j['snippet']['requirement'],
                             "link": j['alternate_url'],
                             'source' : 'hh',
-                            'vacancy_type': j['professional_roles'][0]['name'] # не совсем честно, но пока сойдет
+                            'vacancy_type': j['professional_roles'][0]['name'], # не совсем честно, но пока сойдет
+                            'new_category' : classify_vacancy(j['name'])
 
                         }
                     a_list.append(vacancy_list)
@@ -342,6 +343,24 @@ def hh_parsing():
 def safe_find_text(element, selector, **kwargs):
     found = element.find(selector, **kwargs) if element else None
     return found.text.strip() if found else None
+
+def classify_vacancy(title, description=""):
+    """Классифицирует вакансию по названию и описанию"""
+    text = f"{title} {description}".lower()
+    
+    # Сначала проверяем категории
+    for category, data in category_keywords.items():
+        if any(re.search(rf'{re.escape(keyword)}', text) for keyword in data["keywords"]):
+            # Затем проверяем подкатегории
+            for subcategory, sub_keywords in data["subcategories"].items():
+                if not sub_keywords:  # Если нет ключевых слов - это "Другое"
+                    continue
+                if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
+                    return f"{category} | {subcategory}"
+            # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
+            return f"{category} | {category.split()[0]} (Другое)"
+    
+    return "Другое | Не определено"
 
 
 
@@ -365,7 +384,8 @@ def habr_parsing():
             "salary": safe_find_text(i, 'div', class_='basic-salary'),
             "skills": [skill.text.strip() for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)] or '',
             "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
-                if i.find('a', class_='vacancy-card__title-link') else None
+                if i.find('a', class_='vacancy-card__title-link') else None,
+            "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link'))
             }
 
             a_list.append(vacancy_list)
@@ -421,7 +441,7 @@ def loading_to_base(hh_list, habr_list):
     link_records = cursor.fetchall()
     link_list = [record[0] for record in link_records if record[0] is not None]
 
-
+    
 
     for i in habr_list:
         if i['link'] not in link_list:
@@ -431,7 +451,7 @@ def loading_to_base(hh_list, habr_list):
             # Преобразование даты в datetime, если она в строковом формате
             date_value = parse_russian_date(i['date']) if isinstance(i['date'], str) else i['date']
             cursor.execute("""
-                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source) 
+                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s)
             """, (
                 i['title'], 
@@ -442,7 +462,8 @@ def loading_to_base(hh_list, habr_list):
                 i['skills'], 
                 i['link'],
                 i['location'],
-                i['source']
+                i['source'],
+                i['new_category']
                 
             ))
 
@@ -451,7 +472,7 @@ def loading_to_base(hh_list, habr_list):
             date_value = parse_date(i['date'])
 
             cursor.execute("""
-            INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, vacancy_type, experience)
+            INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, vacancy_type, experience, new_category)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
             i['title'],
@@ -464,7 +485,8 @@ def loading_to_base(hh_list, habr_list):
             i['location'],
             i['source'],
             i['vacancy_type'],
-            i['experience']
+            i['experience'],
+            i['new_category']
 
             ))
     conn.commit()
@@ -484,6 +506,7 @@ def main():
         logger.info("HH загрузило...")
         habr_list = habr_parsing()
         logger.info("Habr загрузило...")
+        
         
         if hh_list or habr_list:
             loading_to_base(hh_list, habr_list)
