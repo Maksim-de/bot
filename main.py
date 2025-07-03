@@ -307,7 +307,7 @@ def hh_parsing():
     max_len = 5
 
 
-    current_time = datetime.now() - timedelta(hours=1.05)
+    current_time = datetime.now() - timedelta(hours=1.5)
     current_time = current_time.astimezone(moscow_tz)
 
     i = 0
