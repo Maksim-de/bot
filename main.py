@@ -3,7 +3,14 @@ from datetime import datetime, timedelta
 import pytz
 import bs4
 import psycopg2
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
 
 category_keywords = {
     
@@ -471,18 +478,18 @@ habr_list = habr_parsing()
 loading_to_base(hh_list, habr_list)
 
 def main():
-
-    
     try:
+        logger.info("Запуск парсера...")
         hh_list = hh_parsing()
+        logger.info("HH загрузило...")
         habr_list = habr_parsing()
-        
+        logger.info("Habr загрузило...")
         
         if hh_list or habr_list:
             loading_to_base(hh_list, habr_list)
             
     except Exception as e:
-        print(f"Критическая ошибка: {str(e)}")
+        logger.error(f"Ошибка: {e}", exc_info=True)
 
 if __name__ == "__main__":
     main()
