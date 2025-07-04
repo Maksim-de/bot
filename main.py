@@ -452,7 +452,7 @@ def loading_to_base(hh_list, habr_list):
             date_value = parse_russian_date(i['date']) if isinstance(i['date'], str) else i['date']
             cursor.execute("""
                 INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s)
             """, (
                 i['title'], 
                 i['company'], 
@@ -473,7 +473,7 @@ def loading_to_base(hh_list, habr_list):
 
             cursor.execute("""
             INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, vacancy_type, experience, new_category)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
             i['title'],
             i['company'],
