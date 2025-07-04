@@ -311,32 +311,29 @@ def hh_parsing():
     current_time = current_time.astimezone(moscow_tz)
 
     i = 0
-    while max_len == 5:
+    for i in range(2000):
         i+=1
-        url = f"https://api.hh.ru/vacancies?{role}{period}{page}{per_page}"
-        page=f"&page={i}"
-        data = requests.get(url).json()
-        try:
-            max_len = len(data['items'])
-            for j in data['items']:
-                    vacancy_list = {
-                            "title": j['name'],
-                            "company": j['employer']['name'],
-                            "date": j['published_at'],
-                            "location": j['area']['name'],
-                            "employment": j['employment']['name'],
-                            "experience": j['experience']['name'],
-                            "salary": j['salary'],
-                            "skills": j['snippet']['requirement'],
-                            "link": j['alternate_url'],
-                            'source' : 'hh',
-                            'vacancy_type': j['professional_roles'][0]['name'], # не совсем честно, но пока сойдет
-                            'new_category' : classify_vacancy(j['name'])
+    url = f"https://api.hh.ru/vacancies?{role}{period}{page}{per_page}"
+    page=f"&page={i}"
+    data = requests.get(url).json()
+    if 'errors' not in data:
+        max_len = len(data['items'])
+        for j in data['items']:
+                vacancy_list = {
+                    "title": j['name'],
+                    "company": j['employer']['name'],
+                    "date": j['published_at'],
+                    "location": j['area']['name'],
+                    "employment": j['employment']['name'],
+                    "experience": j['experience']['name'],
+                    "salary": j['salary'],
+                    "skills": j['snippet']['requirement'],
+                    "link": j['alternate_url'],
+                    'source' : 'hh',
+                    'vacancy_type': j['professional_roles'][0]['name'] # не совсем честно, но пока сойдет
 
-                        }
-                    a_list.append(vacancy_list)
-        except:
-            max_len = 0
+                }
+                a_list.append(vacancy_list)
     return a_list
 
 
