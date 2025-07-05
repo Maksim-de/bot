@@ -18,10 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 psycopg2-binary python-dotenv
-
-      - name: Run parser
-        run: python main.py
-
+          pip install requests psycopg2-binary python-dotenv
+          
       - name: Clean old vacancies (weekly)
         run: python delete_old_vacancies.py
