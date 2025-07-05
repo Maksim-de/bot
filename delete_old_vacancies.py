@@ -21,8 +21,8 @@ def delete_old_vacancies():
     cursor = conn.cursor()
 
     try:
-        # Вычисляем дату, которая была 10 дней назад
-        ten_days_ago = datetime.now() - timedelta(days=10)
+        # Вычисляем дату, которая была 8 дней назад
+        ten_days_ago = datetime.now() - timedelta(days=8)
         
         # Удаляем записи старше 10 дней
         cursor.execute("DELETE FROM vacans WHERE date < %s", (ten_days_ago,))
@@ -31,7 +31,7 @@ def delete_old_vacancies():
         deleted_count = cursor.rowcount
         
         conn.commit()
-        print(f"Удалено {deleted_count} записей старше 10 дней")
+        print(f"Удалено {deleted_count} записей старше 8 дней")
         
     except Exception as e:
         conn.rollback()
