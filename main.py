@@ -330,7 +330,8 @@ def hh_parsing():
                         "skills": j['snippet']['requirement'],
                         "link": j['alternate_url'],
                         'source' : 'hh',
-                        'vacancy_type': j['professional_roles'][0]['name'] # не совсем честно, но пока сойдет
+                        'vacancy_type': j['professional_roles'][0]['name'], # не совсем честно, но пока сойдет
+                        "new_category" : classify_vacancy(j['name'])
     
                     }
                     a_list.append(vacancy_list)
