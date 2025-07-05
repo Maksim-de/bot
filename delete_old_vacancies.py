@@ -1,5 +1,14 @@
 import psycopg2
 from datetime import datetime, timedelta
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
+
 
 def delete_old_vacancies():
     conn = psycopg2.connect(
