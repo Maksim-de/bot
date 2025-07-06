@@ -296,46 +296,65 @@ import re
 
 
 def hh_parsing():
-    moscow_tz = pytz.timezone('Europe/Moscow')
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    date_from = yesterday.strftime("%Y-%m-%dT00:00:00")
+    date_to = today.strftime("%Y-%m-%dT23:59:59")
 
-    role = 'professional_role=156&professional_role=160&professional_role=10&professional_role=12&professional_role=150&professional_role=25&professional_role=165&professional_role=34&professional_role=36&professional_role=73&professional_role=155&professional_role=96&professional_role=164&professional_role=104&professional_role=157&professional_role=107&professional_role=112&professional_role=113&professional_role=148&professional_role=114&professional_role=116&professional_role=121&professional_role=124&professional_role=125&professional_role=126'
-    period = '&search_period=1'
-    page='&page=0'
-    per_page = '&per_page=5'
-    a_list = []
+    # Разбиваем роли на 3 логические группы для балансировки нагрузки
+    role_groups = [
+        ['156', '160', '10', '12', '150', '25', '165', '34'],  # IT и управление
+        ['36', '73', '155', '96', '164', '104', '157', '107'],  # Маркетинг и продажи
+        ['112', '113', '148', '114', '116', '121', '124', '125', '126']  # Другие специалисты
+    ]
 
-    max_len = 5
-
-
-    current_time = datetime.now() - timedelta(hours=1.5)
-    current_time = current_time.astimezone(moscow_tz)
-
-    i = 0
-    for i in range(2000):
-        i+=1
-        url = f"https://api.hh.ru/vacancies?{role}{period}{page}{per_page}"
-        page=f"&page={i}"
-        data = requests.get(url).json()
-        if 'errors' not in data:
-            max_len = len(data['items'])
-            for j in data['items']:
-                    vacancy_list = {
-                        "title": j['name'],
-                        "company": j['employer']['name'],
-                        "date": j['published_at'],
-                        "location": j['area']['name'],
-                        "employment": j['employment']['name'],
-                        "experience": j['experience']['name'],
-                        "salary": j['salary'],
-                        "skills": j['snippet']['requirement'],
-                        "link": j['alternate_url'],
-                        'source' : 'hh',
-                        'vacancy_type': j['professional_roles'][0]['name'], # не совсем честно, но пока сойдет
-                        "new_category" : classify_vacancy(j['name'])
+    all_vacancies = []
     
+    for group in role_groups:
+        page = 0
+        while True:
+            params = {
+                'professional_role': group,
+                'date_from': date_from,
+                'date_to': date_to,
+                'per_page': 25,
+                'page': page
+            }
+            
+            try:
+                response = requests.get("https://api.hh.ru/vacancies", params=params)
+                response.raise_for_status()
+                data = response.json()
+                
+                if not data['items']:
+                    break
+                    
+                for item in data['items']:
+                    vacancy = {
+                        "title": item['name'],
+                        "company": item['employer']['name'],
+                        "date": item['published_at'],
+                        "location": item['area']['name'],
+                        "employment": item['employment']['name'],
+                        "experience": item['experience']['name'],
+                        "salary": item.get('salary'),
+                        "skills": item['snippet']['requirement'],
+                        "link": item['alternate_url'],
+                        'source': 'hh',
+                        'vacancy_type': item['professional_roles'][0]['name'],
+                        'new_category': classify_vacancy(item['name'])
                     }
-                    a_list.append(vacancy_list)
-    return a_list
+                    all_vacancies.append(vacancy)
+                
+                # print(f"Группа {group[:3]}..., Страница {page}: {len(data['items'])} вакансий")
+                page += 1
+                time.sleep(0.5)
+                
+            except Exception as e:
+                print(f"Ошибка: {str(e)}")
+                break
+    
+    return all_vacancies
 
 
 def safe_find_text(element, selector, **kwargs):
