@@ -511,11 +511,6 @@ def loading_to_base(hh_list, habr_list):
     conn.close()
 
 
-hh_list = hh_parsing()
-habr_list = habr_parsing()
-
-loading_to_base(hh_list, habr_list)
-
 def main():
     try:
         logger.info("Запуск парсера...")
