@@ -383,18 +383,18 @@ def classify_vacancy(title, description=""):
 
 def habr_parsing():
     a_list = []
-    num_list = 30
+    num_list = 25
 
     for j in range(num_list):
+        j+=1
         data = requests.get(f'https://career.habr.com/vacancies?page={j}&type=all')
         soup = BeautifulSoup(data.content, 'html.parser')
         vacancy = soup.find_all('div', class_='vacancy-card')
-        
         for i in vacancy:
             vacancy_list = {
             "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
             "company": safe_find_text(i, 'a', class_='link-comp', href=lambda x: x and '/companies/' in x),
-            "date": safe_find_text(i, 'time', class_='basic-date'),
+            "date": datetime.now(),
             "location": safe_find_text(i, 'a', href=lambda x: x and 'city_id=' in x),
             'source' : 'habr',
             "employment": safe_find_text(i, 'span', class_='preserve-line', string=lambda x: x and 'Полный рабочий день' in x),
@@ -406,6 +406,7 @@ def habr_parsing():
             }
 
             a_list.append(vacancy_list)
+        time.sleep(1)
     return a_list
 
 def parse_date(date_str):
