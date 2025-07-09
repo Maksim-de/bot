@@ -399,7 +399,7 @@ def habr_parsing():
             'source' : 'habr',
             "employment": safe_find_text(i, 'span', class_='preserve-line', string=lambda x: x and 'Полный рабочий день' in x),
             "salary": safe_find_text(i, 'div', class_='basic-salary'),
-            "skills": [skill.text.strip() for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)] or '',
+            "skills": ', '.join([skill.text for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)]) if i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x) else '',
             "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
                 if i.find('a', class_='vacancy-card__title-link') else None,
             "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link'))
