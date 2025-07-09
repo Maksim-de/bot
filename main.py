@@ -4,6 +4,7 @@ import pytz
 import bs4
 import psycopg2
 import logging
+import time
 
 logging.basicConfig(
     level=logging.INFO,
