@@ -392,21 +392,27 @@ def habr_parsing():
         soup = BeautifulSoup(data.content, 'html.parser')
         vacancy = soup.find_all('div', class_='vacancy-card')
         for i in vacancy:
-            vacancy_list = {
-            "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
-            "company": safe_find_text(i, 'a', class_='link-comp', href=lambda x: x and '/companies/' in x),
-            "date": datetime.now(),
-            "location": safe_find_text(i, 'a', href=lambda x: x and 'city_id=' in x),
-            'source' : 'habr',
-            "employment": safe_find_text(i, 'span', class_='preserve-line', string=lambda x: x and 'Полный рабочий день' in x),
-            "salary": safe_find_text(i, 'div', class_='basic-salary'),
-            "skills": ', '.join([skill.text for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)]) if i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x) else '',
-            "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
-                if i.find('a', class_='vacancy-card__title-link') else None,
-            "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link'))
-            }
+            time_vac = safe_find_text(i, 'time', class_='basic-date')
+            time_vac = parse_russian_date(time_vac)
+            if datetime.now() - time_vac < timedelta(days=1):
+            
+                vacancy_list = {
+                "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
+                "company": safe_find_text(i, 'a', class_='link-comp', href=lambda x: x and '/companies/' in x),
+                "date": datetime.now(),
+                "location": safe_find_text(i, 'a', href=lambda x: x and 'city_id=' in x),
+                'source' : 'habr',
+                "employment": safe_find_text(i, 'span', class_='preserve-line', string=lambda x: x and 'Полный рабочий день' in x),
+                "salary": safe_find_text(i, 'div', class_='basic-salary'),
+                "skills": ', '.join([skill.text for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)]) if i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x) else '',
+                "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
+                    if i.find('a', class_='vacancy-card__title-link') else None,
+                "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link'))
+                }
 
-            a_list.append(vacancy_list)
+                a_list.append(vacancy_list)
+            else:
+                break
         time.sleep(1)
     return a_list
 
@@ -460,22 +466,22 @@ def loading_to_base(hh_list, habr_list):
     link_records = cursor.fetchall()
     link_list = [record[0] for record in link_records if record[0] is not None]
 
+    cursor.execute("SELECT distinct link FROM vacans where date > CURRENT_DATE")
+    link_records = cursor.fetchall()
+    link_list_now = [record[0] for record in link_records if record[0] is not None]
+
     
 
     for i in habr_list:
-        if i['link'] not in link_list:
-            # Обработка skills (преобразуем в JSON строку, если это список/словарь)
-            skills = json.dumps(i['skills']) if isinstance(i['skills'], (list, dict)) else i['skills']
+        if i['link'] not in link_list_now:
             
-            # Преобразование даты в datetime, если она в строковом формате
-            date_value = parse_russian_date(i['date']) if isinstance(i['date'], str) else i['date']
             cursor.execute("""
                 INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s)
             """, (
                 i['title'], 
                 i['company'], 
-                date_value, 
+                i['date'], 
                 i['employment'], 
                 i['salary'], 
                 i['skills'], 
