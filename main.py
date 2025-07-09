@@ -523,6 +523,7 @@ def main():
         
         
         if hh_list or habr_list:
+            logger.info("Начало загрузки в базу данных")
             loading_to_base(hh_list, habr_list)
             
     except Exception as e:
