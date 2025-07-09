@@ -21,6 +21,9 @@ from markdown import markdown
 # import matplotlib.pyplot as plt
 # import matplotlib.dates as mdates
 
+vacanciessss = []
+
+
 category_keywords = {
     
     "Аналитика": {
@@ -320,7 +323,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 main_keyboard = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Поиск вакансий")],
     [KeyboardButton(text="AI ассистент")],
-    [KeyboardButton(text="В начало"), KeyboardButton(text="Помощь")]
+    [KeyboardButton(text="Опубликовать вакансию"), KeyboardButton(text="Помощь")]
 ], resize_keyboard=True)
 
 # Меню категорий вакансий
@@ -424,6 +427,7 @@ async def handle_subcategory(message: Message):
     else:
         selected_subcategories[user_id].add(subcategory)
         action = "✅ Добавлено к выбору"
+        print(selected_subcategories)
     
     # Получаем текущую категорию для обновления клавиатуры
     current_category = next(
@@ -473,13 +477,14 @@ def get_cities_keyboard(all_cities,user_id: int = None) -> ReplyKeyboardMarkup:
     all_cities_now = all_cities
     
     # Приоритетные города (должны быть в начале)
-    priority_cities = ["Москва", "Санкт-Петербург", "Казань"]
+    priority_cities = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Екатеринбург", 'Красноярск', "Нижний Новгород", 'Челябинск', 'Уфа',
+                       "Самара", "Ростов-на-Дону", 'Краснодар', "Омск", 'Воронеж', 'Пермь', 'Волгоград']
     
     # Сортируем города: сначала приоритетные, затем остальные по алфавиту
-    sorted_cities = priority_cities + sorted(
-        [city for city in all_cities_now if city not in priority_cities],
-        key=lambda x: x.lower()
-    )
+    sorted_cities = priority_cities # + sorted(
+    #     [city for city in all_cities_now if city not in priority_cities],
+    #     key=lambda x: x.lower()
+    # )
     
     # Добавляем кнопки городов (по 2 в ряд)
     for city in sorted_cities:
@@ -531,7 +536,7 @@ async def handle_city_selection(message: Message):
 
 
 @router.message(F.text == "Начать поиск вакансий")
-async def handle_vacancy_search(message: Message, state: FSMContext):
+async def handle_vacancy_search(message: Message, state: FSMContext, bot: Bot):
     user_id = str(message.from_user.id)
     
     # Проверяем, что пользователь выбрал города
@@ -561,6 +566,7 @@ async def handle_vacancy_search(message: Message, state: FSMContext):
             f"<b>Города:</b>\n{cities_text}\n\n"
             "Новые вакансии моментально попадут к вам...",
             parse_mode="HTML", reply_markup=main_keyboard)
+        await send_personalized_vacancies(bot)  
     except:
          await message.answer(
             "🔍 Ошибка блин блинский.\n\n",
@@ -572,8 +578,9 @@ async def handle_vacancy_search(message: Message, state: FSMContext):
 @router.message(lambda message: message.text == "В главное меню")
 async def back_to_main(message: Message):
     user_id = message.from_user.id
-    if user_id in selected_subcategories:
-        del selected_subcategories[user_id]
+    # Думаю стоит сохранять
+    # if user_id in selected_subcategories:
+    #     del selected_subcategories[user_id]
     await message.answer("Возвращаемся в главное меню", reply_markup=main_keyboard)
 
 @router.message(lambda message: message.text == "AI ассистент")
@@ -582,7 +589,8 @@ async def update_resume(message: Message, state: FSMContext):
         resize_keyboard=True,
         keyboard=[
             [KeyboardButton(text="🔥 Прожарка резюме на основе вакансий")],
-            [KeyboardButton(text="🎯 Общая оценка резюме")]
+            [KeyboardButton(text="🎯 Общая оценка резюме")],
+            [KeyboardButton(text="В главное меню")]
         ]
     )
     await message.answer(
@@ -597,144 +605,376 @@ def escape_html(text):
 
 
 def clean_and_format(text: str) -> str:
-    # Сначала экранируем HTML-спецсимволы
-    # text = escape_html(text)
-    
-    # Преобразуем Markdown в HTML
-    text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)  # **жирный** -> <b>жирный</b>
-    # text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)      # *курсив* -> <i>курсив</i>
-    
 
-    # text = re.sub(r'</?h[1-6]>', '', text)  # Удаляем <h3> и подобные
-    # text = re.sub(r'</?p>', '\n\n', text)   # Заменяем <p> на двойные переносы
+    text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)  
 
-    # text = text.replace('<hr/>', '\n━━━━━━━━━━\n')  # Заменяем горизонтальную линию
-   
-
-    # # Очищаем HTML через BeautifulSoup
-    # soup = BeautifulSoup(text, 'html.parser')
     return text
 
 
-@router.message(lambda message: message.text == "Общая оценка резюме")
-async def greet(message: Message, state: FSMContext):
-    await message.answer(
-        text="Отлично, пришлите резюме в формате .pdf", 
-        reply_markup=ReplyKeyboardRemove()
-    )
-    await state.set_state(Form.resume)
-    logger.info(f"Пользователь {message.from_user.id} перешёл в состояние Form.resume")
 
-@router.message(F.document, Form.resume)  # Сначала проверяем состояние
-async def handle_pdf(message: Message, state: FSMContext):
+
+@router.message(lambda message: message.text == "🎯 Общая оценка резюме")
+async def general_resume_review(message: Message, state: FSMContext):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="В главное меню")]],
+        resize_keyboard=True
+    )
+    await message.answer(
+        text="📌 Отлично! Пришлите резюме в формате PDF для комплексной оценки",
+        reply_markup=keyboard
+    )
+    await state.set_state(ResumeAnalysisStates.waiting_for_resume_total)
+    logger.info(f"Пользователь {message.from_user.id} начал общую оценку резюме")
+
+@router.message(F.document, ResumeAnalysisStates.waiting_for_resume_total)
+async def handle_general_resume(message: Message, state: FSMContext):
     try:
         if not message.document.file_name.lower().endswith('.pdf'):
             await message.answer("❌ Файл должен быть в формате PDF!")
             return
 
         logger.info(f"Получен документ: {message.document.file_name}")
+        await message.answer("🔍 Анализирую резюме... Мне нужно 3-5 минут")
 
-        await message.answer("📄 Файл получил, мне нужно пару минут...")
-
-        # Скачиваем файл
+        # Скачиваем и обрабатываем файл
         file = await message.bot.download(message.document.file_id)
-        if not file:
-            await message.answer("❌ Не удалось загрузить файл. Попробуйте ещё раз.")
-            return
-
         pdf_bytes = file.read()
+        
+        # Извлекаем текст и сохраняем в state
         extracted_text = extract_text_from_pdf(pdf_bytes)
-
         if not extracted_text:
-            await message.answer("❌ Не удалось извлечь текст из PDF. Убедитесь, что файл не сканированный.")
+            await message.answer("❌ Не удалось извлечь текст. Убедитесь, что файл не сканированный.")
+            await state.clear()
             return
+            
+        await state.update_data(resume_text=extracted_text)
+        await state.set_state(ResumeAnalysisStates.resume_text_stored)
 
-        logger.info(f"Извлечен текст из документа: {message.document.file_name}")
-        answer = generating_answer_without_vacancy(extracted_text, temp=0.8)
-        # answer = answer.replace("**", "<b>").replace("*", "<i>") 
-        print(answer)
-        # answer = html.escape(answer)
-        # answer = answer.replace("_", "\\_").replace("*", "\\*").replace("`", "\\`").replace("#", "\\#")
-        answer = clean_and_format(answer)
-        print(answer) 
-        await message.answer(answer, parse_mode="HTML")
-        await state.clear()
+        # Вызываем hot_resume для общей оценки
+        analysis_result = generating_answer_without_vacancy(extracted_text)  
+        formatted_result = clean_and_format(analysis_result)
+        
+        await message.answer(formatted_result, parse_mode="HTML")
+        await message.answer(
+            "✅ Анализ завершен. Хотите более детальную проверку по конкретным вакансиям?",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard=[
+                    [KeyboardButton(text="В главное меню")]
+                ],
+                resize_keyboard=True
+            )
+        )
 
     except Exception as e:
-        logger.error(f"Ошибка при обработке PDF: {e}")
-        await message.answer("⚠️ Произошла ошибка. Попробуйте другой файл.")
+        logger.error(f"Ошибка при обработке резюме: {e}", exc_info=True)
+        await message.answer("⚠️ Произошла ошибка анализа. Попробуйте другой файл.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard=[
+                    [KeyboardButton(text="В главное меню")]
+                ],
+                resize_keyboard=True
+            )
+        )
         await state.clear()
 
-
-
-
-
-@router.message(lambda message: message.text == "🔥 Прожарка резюме на основе вакансий")
-async def start_resume_roast(message: Message, state: FSMContext):
-    await state.set_state(ResumeStates.waiting_for_category)
+@router.message(F.text, lambda message: message.text == "🔥 Прожарка резюме на основе вакансий")
+async def start_resume_roast_from_existing(message: Message, state: FSMContext):
+    await state.set_state(ResumeAnalysisStates.waiting_for_category)
     await message.answer(
-        "🔍 Для точной прожарки твоего резюме выбери категорию вакансий:",
-        reply_markup=categories_keyboard
+        "🔍 Выберите категорию вакансий для анализа резюме:",
+        reply_markup=get_roast_categories_keyboard()
     )
 
-@router.message(ResumeStates.waiting_for_category, lambda message: message.text in category_keywords.keys())
-async def handle_resume_category(message: Message, state: FSMContext):
-    category = message.text
-    await state.update_data(resume_category=category)
-    await state.set_state(ResumeStates.waiting_for_subcategory)
+def get_roast_categories_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🔥 Аналитика"), KeyboardButton(text="🔥 Разработка")],
+            [KeyboardButton(text="🔥 Тестирование"), KeyboardButton(text="🔥 AI (ИИ)")],
+            [KeyboardButton(text="🔥 Менеджмент"), KeyboardButton(text="🔥 Дизайн")],
+            [KeyboardButton(text="🔥 Безопасность"), KeyboardButton(text="🔥 Администрирование")],
+            [KeyboardButton(text="В главное меню")]
+        ],
+        resize_keyboard=True
+    )
+@router.message(F.text, lambda message: message.text[2:] in category_keywords.keys())
+async def handle_roast_category(message: Message, state: FSMContext):
+    """🔥 Обработчик выбора категории для прожарки"""
+    category = message.text[2:]
+    await state.update_data(roast_category=category)
+    await state.set_state(ResumeAnalysisStates.waiting_for_subcategory)
     
     await message.answer(
-        f"Выбери подкатегорию для {category}:\n"
-        "Мы подберем актуальные вакансии для сравнения",
-        reply_markup=get_subcategories_keyboard(category, message.from_user.id)
+        f"🔥 Выберите <b>ОДНУ</b> специализацию в категории <b>{category}</b>:\n"
+        "Нажмите на нужную подкатегорию ниже 👇",
+        reply_markup=get_roast_subcategories_keyboard(category),
+        parse_mode="HTML"
     )
 
-@router.message(ResumeStates.waiting_for_subcategory, lambda message: any(
-    message.text.replace("✅ ", "") in subcats 
-    for cat in category_keywords.values() 
-    for subcats in cat["subcategories"].keys()
-))
-async def handle_resume_subcategory(message: Message, state: FSMContext):
-    subcategory = message.text.replace("✅ ", "")
-    await state.update_data(resume_subcategory=subcategory)
+def get_roast_subcategories_keyboard(category: str) -> ReplyKeyboardMarkup:
+    """🔥 Клавиатура подкатегорий для прожарки"""
+    builder = ReplyKeyboardBuilder()
     
-    data = await state.get_data()
-    category = data.get('resume_category')
+    # Добавляем подкатегории с emoji
+    for subcategory in category_keywords[category]["subcategories"].keys():
+        builder.add(KeyboardButton(text=f"🔥 {subcategory}"))  
+    
+    builder.adjust(2)
+    
+    # Управляющие кнопки тоже с emoji
+    builder.row(
+        KeyboardButton(text="В главное меню")
+    )
+    
+    return builder.as_markup(resize_keyboard=True)
+
+
+hair_user = {}
+@router.message(F.text, 
+    ResumeAnalysisStates.waiting_for_subcategory,
+    lambda message: any(
+        message.text[2:] in subcats
+        for cat in category_keywords.values()
+        for subcats in cat["subcategories"].keys()
+    )
+)
+async def handle_roast_subcategory_selection(message: Message, state: FSMContext):
+    """🔥 Обработчик выбора подкатегории"""
+    hair_user[message.from_user.id] = message.text[2:] 
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="В главное меню")]],
+        resize_keyboard=True
+    )
+    await message.answer(
+        text="📌 Отлично! Пришлите резюме в формате PDF для комплексной оценки",
+        reply_markup=keyboard
+    )
+    await state.set_state(ResumeAnalysisStates.waiting_for_resume_fair)
+    logger.info(f"Пользователь {message.from_user.id} начал прожарку резюме")
+
+@router.message(F.document, ResumeAnalysisStates.waiting_for_resume_fair)
+async def handle_general_resume(message: Message, state: FSMContext):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="В главное меню")]],
+        resize_keyboard=True
+    )
+    try:
+        if not message.document.file_name.lower().endswith('.pdf'):
+            await message.answer("❌ Файл должен быть в формате PDF!",
+                reply_markup=keyboard)
+            return
+
+        logger.info(f"Получен документ: {message.document.file_name}")
+        await message.answer("🔍 Анализирую резюме... Мне нужно 3-5 минут")
+
+        # Скачиваем и обрабатываем файл
+        file = await message.bot.download(message.document.file_id)
+        pdf_bytes = file.read()
+        print('Скачали')
+        
+        # Извлекаем текст и сохраняем в state
+        extracted_text = extract_text_from_pdf(pdf_bytes)
+        # if not extracted_text:
+        #     await message.answer("❌ Не удалось извлечь текст. Убедитесь, что файл не сканированный.")
+        #     await state.clear()
+        #     return
+        print('Прочитали')
+        # await state.update_data(resume_text=extracted_text)
+        # await state.set_state(ResumeAnalysisStates.resume_text_stored)
+
+        # Вызываем hot_resume для общей оценки
+
+        print(hair_user)
+        print(hair_user[message.from_user.id])
+        print(extracted_text)
+        analysis_result = await hot_resume(extracted_text, hair_user[message.from_user.id])  
+        formatted_result = clean_and_format(analysis_result)
+        
+        await message.answer(
+            formatted_result,
+            parse_mode="HTML",
+            reply_markup=keyboard
+        )
+    except:
+        await message.answer(
+            'Ошибка',
+            parse_mode="HTML",
+            reply_markup=keyboard)
+            
+    
+
+
+@router.message(F.text == "Опубликовать вакансию")
+async def handle_vacancy_search(message: Message, state: FSMContext):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="В главное меню")]],
+        resize_keyboard=True
+    )
     
     await message.answer(
-        f"🔥 Отлично! Сейчас проанализируем твое резюме по параметрам:\n\n"
-        f"• Категория: {category}\n"
-        f"• Подкатегория: {subcategory}\n\n"
-        "Пришли мне свое резюме в формате PDF",
-        reply_markup=ReplyKeyboardRemove()
-    )
-    # Здесь можно добавить переход в следующее состояние для обработки файла
+    "🌿 <b>Добрый день!</b>\n\n"
+    "Мы рады, что вы решили разместить вакансию в нашем сервисе!\n\n"
+    "📝 <b>Пожалуйста, напишите в чат с ботом следующую информацию:</b>\n\n"
+    "• Наименование вакансии\n"
+    "• Описание вакансии\n"
+    "• Компания\n"
+    "• Требуемые навыки\n"
+    "• Опыт работы\n"
+    "• Уровень зарплаты (по желанию)\n"
+    "• Локация/удаленная работа\n"
+    "• Ссылка на вакансию (если есть)\n\n"
+    "💼 Наш менеджер рассмотрит вашу заявку и свяжется с вами в ближайшее время "
+    "для уточнения деталей и публикации вакансии.\n\n"
+    "<i>Благодарим за сотрудничество!</i>",
+    parse_mode="HTML",
+    reply_markup=keyboard
+)
 
-@router.message(ResumeStates.waiting_for_category, lambda message: message.text == "В главное меню")
-@router.message(ResumeStates.waiting_for_subcategory, lambda message: message.text == "В главное меню")
-async def cancel_resume_roast(message: Message, state: FSMContext):
+
+    await state.set_state(Form.waiting_for_description)
+
+@router.message(Form.waiting_for_description)
+async def process_vacancy_description(message: Message, state: FSMContext):
+    if message.text == "В главное меню":
+        await state.clear()
+        await message.answer("Создание вакансии отменено", reply_markup=main_keyboard)
+        return
+    
+    # Сохраняем данные (можно добавить в FSM storage)
+    await state.update_data(vacancy_description=message.text)
+    
+    # Подтверждение получения
+    await message.reply(
+        "✅ <b>Вакансия получена!</b>\n\n"
+        "Менеджер проверит информацию и свяжется с вами в течение 24 часов.\n"
+        "Спасибо за доверие!",
+        parse_mode="HTML",
+        reply_markup=main_keyboard  # Убираем спец. клавиатуру
+    )
+    
+    # Здесь можно добавить отправку уведомления менеджеру
+    await forward_to_manager(message)
+    
     await state.clear()
-    await message.answer(
-        "Возвращаемся в главное меню",
-        reply_markup=main_keyboard
+
+    
+@router.message(Command("forward_vacancy"))  # Можно привязать к команде или другому фильтру
+async def forward_to_manager(message: Message):
+    MANAGER_CHAT_ID = -4959512272  # Замените на реальный ID чата/группы
+    
+    try:
+        # 1. Пересылаем сообщение менеджеру
+        forwarded_msg = await message.forward(
+            chat_id=MANAGER_CHAT_ID
+        )
+        
+        # 2. Отправляем поясняющее сообщение (привязанное к пересланному)
+        await message.bot.send_message(
+            chat_id=MANAGER_CHAT_ID,
+            text=f"🚀 Новая вакансия от @{message.from_user.username}",
+            reply_to_message_id=forwarded_msg.message_id  # Ответ именно на пересланное сообщение
+        )
+        
+        # 3. Подтверждаем пользователю
+        await message.reply("✅ Вакансия отправлена менеджеру!")
+        
+    except Exception as e:
+        print(f"Ошибка пересылки: {e}")
+        await message.answer("⚠️ Не удалось отправить вакансию. Попробуйте позже.")
+ 
+
+@router.message(F.text == "Помощь")
+async def handle_trable(message: Message, state: FSMContext):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="В главное меню")]],
+        resize_keyboard=True
     )
+    
+    await message.answer(
+    "🛎 <b>Служба поддержки</b>\n\n"
+        "Расскажите, с какой проблемой вы столкнулись?\n"
+        "Опишите её как можно подробнее, и мы обязательно поможем!\n\n",
+    parse_mode="HTML",
+    reply_markup=keyboard
+    )
+
+
+    await state.set_state(Form.waiting_for_trable)
+
+@router.message(Form.waiting_for_trable)
+async def process_vacancy_description(message: Message, state: FSMContext):
+    if message.text == "В главное меню":
+        await state.clear()
+        await message.answer("✅ Запрос в поддержку отменен)", reply_markup=main_keyboard)
+        return
+    
+    # Сохраняем данные (можно добавить в FSM storage)
+    await state.update_data(trable=message.text)
+    
+    # Подтверждение получения
+    await message.reply(
+        "💌 <b>Спасибо за обращение!</b>\n\n"
+        "Ваше сообщение получено и передано в поддержку.\n"
+        "Мы ответим вам в ближайшее время.\n",
+        parse_mode="HTML",
+        reply_markup=main_keyboard  # Убираем спец. клавиатуру
+    )
+
+    await forward_to_manager_trable(message)
+    
+    await state.clear()
+
+@router.message(Command("forward_to_manager_trable"))  # Можно привязать к команде или другому фильтру
+async def forward_to_manager_trable(message: Message):
+    MANAGER_CHAT_ID = -4959512272  # Замените на реальный ID чата/группы
+    
+    try:
+        # 1. Пересылаем сообщение менеджеру
+        forwarded_msg = await message.forward(
+            chat_id=MANAGER_CHAT_ID
+        )
+        
+            
+           
+        # 2. Отправляем поясняющее сообщение (привязанное к пересланному)
+        await message.bot.send_message(
+            chat_id=MANAGER_CHAT_ID,
+            text= (f"🆘 <b>Новый запрос в поддержку</b>\n\n"
+                 f"🚀 Проблема у @{message.from_user.username}"
+                 f"🆔 <b>ID:</b> {message.from_user.id}\n"
+                f"📅 <b>Время:</b> {message.date.strftime('%d.%m %H:%M')}\n\n"
+             # Ответ именно на пересланное сообщение
+            ),
+            parse_mode="HTML",
+            reply_to_message_id=forwarded_msg.message_id 
+        )
+        
+        # 3. Подтверждаем пользователю
+        await message.reply("✅ Ваша проблема отправлена менеджеру!")
+        
+    except Exception as e:
+        print(f"Ошибка пересылки: {e}")
+        await message.answer("Упс... что-то пошло не так.")
+ 
 
 
 
 
 # Бд ниже
 
-
 async def hourly_db_update(bot: Bot):
     """Ежечасное обновление БД"""
+    global vacanciessss
     while True:
-        await asyncio.sleep(3600)  # 1 час
+        
         print(f"[{datetime.now()}] Запуск обновления БД...")
         print(selected_subcategories)
         await save_selected_subcategories()
         print('Данные загруженны')
-        await send_personalized_vacancies(bot)  # Убедитесь, что router доступен в этой области видимости
-
+        vacanciessss = await load_and_cache_vacancies()
+        print('загружены вакансии')
+        await send_personalized_vacancies(bot)  
+        print('рассылка завершена')
+        await asyncio.sleep(3600)  # 1 час
     
         
 
@@ -743,10 +983,10 @@ async def start_background_tasks(bot: Bot):
     global selected_subcategories
     global selected_cities
     global all_cities
-    global vacanciessss
+    # global vacanciessss
 
     loaded_data, all_cities, selected_cities = await load_selected_subcategories()
-    vacanciessss = await load_and_cache_vacancies()
+    # vacanciessss = await load_and_cache_vacancxies()
     selected_subcategories.update(loaded_data)
     print(f"[{datetime.now()}] Загружено {len(loaded_data)} пользовательских выборов из БД")
     
@@ -901,7 +1141,7 @@ async def load_and_cache_vacancies():
             for record in records
         }
     
-        
+        print('Вакансии успешно закешированы')
         return vacancies
         
     except Exception as e:
@@ -920,18 +1160,33 @@ from datetime import datetime, timedelta
 # Глобальный словарь для хранения времени последней рассылки
 last_send_time = {}
 send_vacancies = {}
+vacancy_counter = {}
+
+
 
 async def send_personalized_vacancies(bot: Bot):
     """Рассылает только новые вакансии, появившиеся с последней проверки"""
+    global vacancy_counter
+    print('начало рассылки')
+    print(len(vacanciessss))
+
     try:
         current_time = datetime.now()
         
-        # 1. Фильтруем только свежие вакансии
-        fresh_vacancies = {
-            vid: v for vid, v in vacanciessss.items()
-            if datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S') >= current_time - timedelta(hours=24)
-        }
-        
+        fresh_vacancies = {}
+        for vid, v in vacanciessss.items():
+            try:
+                # Пробуем разные форматы даты
+                try:
+                    vacancy_date = datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S.%f')
+                except ValueError:
+                    vacancy_date = datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S')
+                
+                if vacancy_date >= current_time - timedelta(hours=24):
+                    fresh_vacancies[vid] = v
+            except Exception as e:
+                print(f"Ошибка парсинга даты для вакансии {vid}: {e}")
+                continue
         if not fresh_vacancies:
             print(f"{current_time}: Нет новых вакансий для рассылки")
             return
@@ -949,9 +1204,11 @@ async def send_personalized_vacancies(bot: Bot):
             previously_sent_links = {vac['link'] for vac in send_vacancies.get(user_id, [])}  # Извлекаем ссылки ранее отправленных вакансий
             new_matched_vacancies = [vac for vac in matched_vacancies if vac['link'] not in previously_sent_links]
 
-            
+            # print(new_matched_vacancies)
+            print(matched_vacancies)
             if new_matched_vacancies:
                 try:
+                    vacancy_counter[user_id] = 0
                     for vac in matched_vacancies:
                         message = ["🔔 <b>Новые вакансии:</b>\n"]
                         message.append(
@@ -959,17 +1216,24 @@ async def send_personalized_vacancies(bot: Bot):
                                 f"🏛 <i>{vac['company']}</i>\n\n"
                                 f"🌍 <b>Локация:</b> {vac['location']}\n"
                                 f"📆 <b>Опыт:</b> {vac['experience']}\n"
-                                f"💼 <b>Навыки:</b> {', '.join(vac['skills'][:10])}{'...' if len(vac['skills']) > 10 else ''}\n\n"
+                                f"💼 <b>Навыки:</b> {vac['skills'][:150]} ...\n\n"
                                 f"🔗 <a href='{vac['link']}'>Подробнее о вакансии</a>\n"
                         )
                     
-                    # Получаем бота из роутера
     
                         await bot.send_message(
                         chat_id=user_id,
                         text="".join(message),
                         parse_mode="HTML"
                         )
+
+                        # vacancy_counter[user_id]  += 1
+                        
+                        # # Если отправили 3 вакансии - делаем паузу
+                        # if vacancy_counter[user_id]  % 3 == 0:
+                        #     print(f"Отправлено 3 вакансии, делаем паузу 10 минут...")
+                        #     await asyncio.sleep(600)  # 10 минут = 600 секунд
+                    
                     
                     last_send_time[user_id] = current_time
                     if user_id not in send_vacancies:
@@ -1007,7 +1271,7 @@ async def load_vacancies_for_analysis(vacancy_category):
         records = await conn.fetch(
             f"SELECT title, salary, skills, location, experience, link FROM vacans WHERE new_category like '%{vacancy_category}'"
         )
-        
+        print('скачали')
         return records
         
     except Exception as e:
@@ -1018,9 +1282,11 @@ async def load_vacancies_for_analysis(vacancy_category):
             await conn.close()
 
 
-async def hot_resume(pdf_text, vacancy_category,  temp):
-    vacancies = await load_vacancies_for_analysis(vacancy_category)
+async def hot_resume(pdf_text, vacancy_category,  temp = 0.8):
+    print('зашли в функцию hot_resume')
     
+    vacancies = await load_vacancies_for_analysis(vacancy_category)
+    print('Перешли к промту')
     prompt = f"""
         Ты — HR-эксперт с 10+ лет опыта в IT-рекрутинге. 
         Проанализируй резюме для позиции {vacancy_category} и дай рекомендации, которые увеличат шансы на отклик на 50%. 
