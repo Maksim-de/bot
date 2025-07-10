@@ -393,6 +393,15 @@ def get_vacancy_categories(element):
 
 
 
+def get_vacancy_level(element):
+    """Извлекает уровень вакансии из текста рядом с /vacancies?qid"""
+    if element:
+        level_link = element.find('a', href=lambda x: x and '/vacancies?qid=' in x)
+        if level_link:
+            return level_link.text.strip()
+    return None
+
+
 
 def habr_parsing():
     a_list = []
@@ -420,7 +429,8 @@ def habr_parsing():
                 "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
                     if i.find('a', class_='vacancy-card__title-link') else None,
                 "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link')),
-                "vacancy_type": get_vacancy_categories(i)  # Добавленные категории из /vacancies/spec/
+                "vacancy_type": get_vacancy_categories(i),  # Добавленные категории из /vacancies/spec/
+                "experience": get_vacancy_level(i)
                 }
 
                 a_list.append(vacancy_list)
@@ -489,7 +499,7 @@ def loading_to_base(hh_list, habr_list):
         if i['link'] not in link_list_now:
             
             cursor.execute("""
-                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category, vacancy_type) 
+                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category, vacancy_type, experience) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s, %s)
             """, (
                 i['title'], 
@@ -502,7 +512,8 @@ def loading_to_base(hh_list, habr_list):
                 i['location'],
                 i['source'],
                 i['new_category'],
-                i['vacancy_type']
+                i['vacancy_type'],
+                i['experience']
                 
             ))
 
