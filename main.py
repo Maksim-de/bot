@@ -380,6 +380,18 @@ def classify_vacancy(title, description=""):
     
     return "Другое | Не определено"
 
+def get_vacancy_categories(element):
+    """Извлекает категории вакансий из ссылок /vacancies/spec/"""
+    categories = []
+    if element:
+        spec_links = element.find_all('a', href=lambda x: x and '/vacancies/spec/' in x)
+        for link in spec_links:
+            # Извлекаем последнюю часть пути как название категории
+            category = link['href'].split('/')[-1]
+            categories.append(category)
+    return ', '.join(categories) if categories else ''
+
+
 
 
 def habr_parsing():
@@ -407,7 +419,8 @@ def habr_parsing():
                 "skills": ', '.join([skill.text for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)]) if i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x) else '',
                 "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
                     if i.find('a', class_='vacancy-card__title-link') else None,
-                "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link'))
+                "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link')),
+                "vacancy_type": get_vacancy_categories(i)  # Добавленные категории из /vacancies/spec/
                 }
 
                 a_list.append(vacancy_list)
@@ -476,8 +489,8 @@ def loading_to_base(hh_list, habr_list):
         if i['link'] not in link_list_now:
             
             cursor.execute("""
-                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s)
+                INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category, vacancy_type) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s, %s)
             """, (
                 i['title'], 
                 i['company'], 
@@ -488,7 +501,8 @@ def loading_to_base(hh_list, habr_list):
                 i['link'],
                 i['location'],
                 i['source'],
-                i['new_category']
+                i['new_category'],
+                i['vacancy_type']
                 
             ))
 
