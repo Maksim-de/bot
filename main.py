@@ -500,7 +500,7 @@ def loading_to_base(hh_list, habr_list):
             
             cursor.execute("""
                 INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, new_category, vacancy_type, experience) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s,  %s, %s, %s)
             """, (
                 i['title'], 
                 i['company'], 
