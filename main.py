@@ -312,7 +312,16 @@ def habr_parsing():
             time_vac = safe_find_text(i, 'time', class_='basic-date')
             time_vac = parse_russian_date(time_vac)
             if datetime.now() - time_vac < timedelta(days=1):
-            
+                experience = get_vacancy_level(i)
+                if experience is None:
+                    experience = 'Не указано'
+                elif (experience == 'Старший (Senior)') or (experience == 'Ведущий (Lead)') :
+                    experience = "3-6 года"
+                elif experience == 'Стажёр (Intern)':
+                    experience = "Нет опыта"
+                elif (experience == 'Средний (Middle)') or (experience == 'Младший (Junior)'):
+                    experience = "1-3 года"
+                
                 vacancy_list = {
                 "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
                 "company": safe_find_text(i, 'a', class_='link-comp', href=lambda x: x and '/companies/' in x),
@@ -326,7 +335,7 @@ def habr_parsing():
                     if i.find('a', class_='vacancy-card__title-link') else None,
                 "new_category" : classify_vacancy(get_vacancy_categories(i), safe_find_text(i, 'a', class_='vacancy-card__title-link')),
                 "vacancy_type": get_vacancy_categories(i),  # Добавленные категории из /vacancies/spec/
-                "experience": get_vacancy_level(i)
+                "experience": experience
                 }
 
                 a_list.append(vacancy_list)
