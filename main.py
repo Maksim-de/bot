@@ -14,276 +14,156 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 category_keywords = {
+ "Аналитика": {
+    "keywords": [
+      "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst', 
+      'bi_developer', 'bi-аналитик, аналитик данных'
+    ],
+    "subcategories": {
+      "Системный аналитик": [
+        "системн", "systems_analyst",  "uml"
+      ],
+      "Бизнес аналитик": [
+        "бизнес", "business", 'бизнес-аналитик'
+      ],
+      "Data аналитик & BI": [
+        'data_analyst', 'bi-аналитик', "bi_developer", 'bi-аналитик, аналитик данных'
+      ],
+      "Продуктовый аналитик": [
+        "продуктов", "product", "a/b", "ab test", "a/b test", 'продуктовый аналитик'
+      ],
+      "Аналитик DWH": [
+        "data engineer", "dwh", "data warehouse", "airflow", "data lake",
+        "databricks", "spark", "hadoop", 'sql'
+      ],
+      "Веб-аналитик": [
+        "веб", "web",
+      ],
+      "Аналитик (другое)": []
+  }
+},
+ "Тестирование": {
+    "keywords": [
+      "тестировщик", "tester", "qa", "quality assurance", "тестировщик-автоматизатор",
+      "qa engineer", "инженер по тестирован", "ручн тестирован", "автоматизирован тестирован",
+      "мобильн тестирован", "веб тестирован", "гейм тестирован", "api тестирован",
+      "безопасност тестирован", "производительност тестирован", "нагрузочн тестирован",
+      "интеграцион тестирован", "регрессион тестирован", "smoke тестирован", "приемочн тестирован",
+      "quality manager", "qa lead", "qa architect", 'manual_testing', 'test_automation', 'qa_engineer'
+    ],
+    "subcategories": {
+      "Ручное тестирование": [
+        "ручн тестировщик", 'ручное', 'ручного', 'manual_testing'
+      ],
+      "Автоматизированное тестирование": [
+        "автоматизатор тестирован", "automation tester", "qa automation", "test_automation"
+      ],
+     "Тестирование (Другое)": []
+    }
+},
+ "Разработка": {
+    "keywords": [
+      "frontend", "front-end", "front end", "javascript", "js",
+      "react", "angular", "vue", "typescript", 'software',
+      "backend", 'devops', 'mobileapp_developer', "data_engineer", 'database_developer', 
+      "fullstack", "full-stack", "full stack", "DevOps-инженер"
+    ],
+    "subcategories": {
+      "Frontend разработка": [
+        "frontend", "front-end", "front end", "javascript", "js",
+        "react", "angular", "vue", "typescript", "ui developer"
+      ],
+      "Backend разработка": [
+        "backend", "back-end", "back end", "server", "api",
+        "python", "java", "php", "node", "nodejs", "net", "ruby", "go", "golang"
+      ],
+      "Fullstack разработка": [
+        "fullstack", "full-stack", "full stack", 
+      ],
+      "Мобильная разработка": [
+        "mobile", "android", "ios", "flutter", "react",
+        "котлин", "kotlin", "swift", "mobileapp_developer"
+      ],
+      "DevOps": [
+        "devops", "DevOps-инженер"
+      ], 
+      "Data engineer": [
+        "data_engineer", 'database_developer'
+      ],
+  "Разработка (Другое)": []
+    }
+},
+ "ML/AI/DS": {
+    "keywords": [ 
+      "ml engineer", "ml-engineer", "mlops", 'data_scientist', 'ml', 'ai', 'промт', 'дата-сайентист'
+    ],
+    "subcategories": {
+      "Data Science": [
+        "data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист'
+      ],
+      "ML Engineering": [
+        "ml engineer", "ml-engineer", "mlops", "model serving"
+      ],
+       "AI (Другое)": []
+    }
+},
+ "Менеджмент": {
+    "keywords": [
+      'менеджер продукта', 'руководитель группы разработки', 'руководитель отдела аналитики', "руководитель проектов", 'project_manager',
+      'project_director', 'product_manager', 'marketing_manager', 'account_manager'
+    ],
+
+    "subcategories": {
+      "Продуктовый менеджмент": [
+        "продуктов менеджер", "product manager", "PM", "product owner",
+        "руководитель продукт", "head of product", 'product_manager'
+      ],
+      "Проектный менеджмент": [
+        "проектн менеджер", "project manager", "PM", "руководитель проектов", 'project_manager', 'scrum_master', 'account_manager'
+      ],
+      "ИТ топ менеджмент": [
+        'руководитель группы разработки',  'руководитель отдела аналитики', 'технический директор (сто)',  'project_director'
+      ],
+
+"Менеджер (Другое)": []
+ }
+    }
+}
+
+category_keywords_work = {
     
     "Аналитика": {
         "keywords": ["аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
         "subcategories": {
-            "Системный аналитик": ["системный аналитик", "system analyst", "аналитик требований", "business system analyst", "технический аналитик", "it analyst"],
-            "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "bpm-аналитик", "ba"],
-            "Аналитик данных": ["аналитик данных", "data analyst", "аналитик sql", "bi analyst", "аналитик отчетности", "data analytics specialist"],
-            "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "data product analyst", "аналитик продукта", "growth analyst"],
-            "Финансовый аналитик": ["финансовый аналитик", "financial analyst", "инвестиционный аналитик", "fp&a analyst", "аналитик бюджетирования"],
-            "Маркетинг-аналитик": ["маркетинг-аналитик", "marketing analyst", "crm-аналитик", "digital analyst", "аналитик рекламы", "media analyst"],
+            "Системный аналитик": ["системный", "system analyst"],
+            "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "bpm-аналитик", "бизнес"],
+            "Data аналитик & BI": ["аналитик данных", "data", "данных", "bi", "аналитик отчетности", "data analytics specialist"],
+            "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "продуктовый"],
             "Веб-аналитик": ["веб-аналитик", "web analyst", "google analytics analyst", "аналитик метрик", "аналитик трафика"],
+            "Аналитик DWH": ["data engineer", "dwh", "data warehouse", "airflow", "data lake", "databricks", "spark", "hadoop", 'sql'],
             "Другое": ["risk analyst", "аналитик безопасности", "hr analyst", "операционный аналитик", "аналитик поддержки"]
 }
-},
-   "Тестирование": {
-        "keywords": ["тестировщик", "tester", "qa", "quality assurance", "контроль качества", "тест", "test", "qa engineer", "инженер по тестированию"],
-        "subcategories": {
-            "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer"],
-            "Автоматизированное тестирование": ["автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
-            "Тестирование мобильных приложений": ["мобильный тестировщик", "mobile tester", "qa mobile", "тестировщик мобильных приложений", "mobile qa engineer"],
-            "Тестирование веб-приложений": ["веб-тестировщик", "web tester", "qa web", "тестировщик веб-приложений", "web qa engineer"],
-            "Тестирование игр": ["гейм тестировщик", "game tester", "qa game", "тестировщик игр", "game qa engineer"],
-            "Тестирование API": ["api тестировщик", "api tester", "qa api", "тестировщик api", "api qa engineer"],
-            "Тестирование безопасности": ["тестировщик безопасности", "security tester", "qa security", "пентестер", "security qa engineer"],
-            "Тестирование производительности": ["тестировщик производительности", "performance tester", "qa performance", "load tester", "performance qa engineer"],
-            "Тестирование (Другое)": ["lead qa", "старший тестировщик", "главный тестировщик", "менеджер по качеству", "quality manager"]
-}
-},
-    
+    },
     "Разработка": {
         "keywords": ["разработчик", "developer", "программист", "engineer", "dev", "software", "приложений", "application", "код", "code"],
         "subcategories": {
             "Frontend разработка": ["frontend", "front-end", "front end", "javascript", "js", "react", "angular", "vue", "typescript", "ui developer"],
             "Backend разработка": ["backend", "back-end", "back end", "server", "api", "python", "java", "php", "node", "nodejs", ".net", "ruby", "go", "golang"],
-            "Fullstack разработка": ["fullstack", "full-stack", "full stack", "универсальный разработчик","mern", "mean", "lamp"],
-            "Мобильная разработка": ["mobile", "android", "ios", "flutter", "react native", "котлин", "kotlin", "swift", "xamarin"],
-            "GameDev": ["game", "игр", "unity", "unreal", "геймдев", "cryengine", "gamedeveloper", "game programmer"],
-            "DevOps": ["devops", "sre", "site reliability", "инфраструктура", "docker", "kubernetes", "k8s", "terraform", "ansible"],
-            "Embedded/IoT": ["embedded", "встроенные", "iot", "arduino", "raspberry", "микроконтроллеры", "firmware", "драйверы"],
-            "Блокчейн": ["blockchain", "смарт-контракты", "solidity", "web3", "defi", "crypto", "крипто"],
+            "Fullstack разработка": ["fullstack", "full-stack", "full stack", "универсальный разработчик","full", "mean", "lamp"],
             "Разработка (Другое)": ["lead developer", "architect", "cto", "техлид", "research", "r&d", "стажер", "intern"]
 }
-    },
-    "AI (ИИ)": {
-        "keywords": ["nlp", "искусственный интеллект","computer vision", "cv", "ии", "ai", "artificial intelligence", "машинное обучение", "ml", "machine learning", "нейросети","deep learning", "data science"],
+},
+     "Тестирование": {
+        "keywords": ["тестировщик", "tester", "qa", "quality assurance", "manual_testing", "тест", "test", "qa engineer", "инженер по тестированию"],
         "subcategories": {
-            "Computer Vision": ["computer vision", "cv", "обработка изображений", "image processing","распознавание образов", "object detection", "openCV", "segmentation"],
-            "Natural Language Processing": [ "nlp", "natural language processing", "обработка текста", "text processing", "chatbot", "чат-бот", "transformer", "LLM","large language model" ],
-            "Data Science": ["data science", "ds", "data analysis", "feature engineering", "pandas", "numpy", "scikit-learn"],
-            "Deep Learning": ["deep learning", "глубокое обучение", "нейронные сети", "neural networks", "tensorflow", "pytorch", "keras"],
-            "ML Engineering": [ "ml engineer", "machine learning engineer", "инженер мл", "mlops", "deployment", "развертывание моделей", "model serving"],
-            "AI Research": ["ai researcher", "research scientist", "научный сотрудник", "публикации","publications", "sota", "state of the art"],
-            "ИИ (Другое)": ["ai стажер", "этика ии", "ai ethics", "ai intern", "ответственный ии", "ai консультант", "ai consultant","ai архитектор", "ai architect"
-]
-}
-    },
-    "Администрирование": {
-        "keywords": ["администратор", "administrator", "админ", "admin", "сетевой", "network","баз данных", "database", "сервер", "server","поддержка", "support", "техподдержка", "helpdesk"],
-        "subcategories": {
-            "Системный администратор": ["системный администратор", "system administrator", "sysadmin", "linux администратор","windows администратор", "unix администратор", "админ серверов", "server administrator"],
-            "Сетевой администратор": ["сетевой администратор", "network administrator", "админ сетей", "cisco администратор","junos администратор", "firewall администратор", "vpn администратор"],
-"Администратор баз данных": [
-"администратор баз данных", "dba", "database administrator", "mysql администратор",
-"postgresql администратор", "oracle dba", "mssql администратор", "mongodb администратор"
-],
-"DevOps/Администрирование": [
-"devops администратор", "sre", "site reliability engineer", "cloud администратор",
-"aws администратор", "azure администратор", "gcp администратор", "kubernetes администратор"
-],
-"Администратор 1С": [
-"администратор 1с", "1с администратор", "1с специалист", "1с поддержка",
-"1с настройка", "1с конфигурация", "1с разработка"
-],
-"Виртуализация и облака": [
-"администратор виртуализации", "vmware администратор", "hyper-v администратор", "kvm администратор",
-"openstack администратор", "docker администратор", "kubernetes администратор"
-],
-"Безопасность": [
-"администратор безопасности", "security administrator", "siem администратор", "soc администратор",
-"кибербезопасность", "cybersecurity", "pentest администратор"
-],
-"Техническая поддержка": [
-"администратор поддержки", "helpdesk администратор", "it support", "техподдержка",
-"service desk", "офисный администратор"
-],
-"Администрирование (Другое)": [
-"старший администратор", "lead administrator", "главный администратор", "стажер администратор", "junior administrator"
-]
-}
-},
-   "Информационная безопасность": {
-"keywords": [
-"безопасность", "security", "кибербезопасность", "cybersecurity",
-"защита", "protection", "аудит", "audit",
-"сетевой", "network", "pentest", "тестирование на проникновение",
-"compliance", "соответствие", "политики", "policies"
-],
-"subcategories": {
-"Аналитик безопасности": [
-"аналитик безопасности", "security analyst", "SOC analyst", "мониторинг безопасности",
-"инциденты", "incident response", "SIEM", "угрозы",
-"threat intelligence"
-],
-"Пентестер": [
-"тестирование на проникновение", "penetration tester", "этичный хакер", "ethical hacker",
-"red team", "vulnerability assessment", "web app pentest", "network pentest",
-"bug bounty"
-],
-"Сетевой безопасник": [
-"сетевой безопасник", "network security", "firewall", "IDS/IPS",
-"VPN", "DDoS protection", "NGFW", "ZTNA",
-"микросетевой сегментации"
-],
-"Криптограф": [
-"криптограф", "cryptography", "шифрование", "encryption",
-"PKI", "TLS/SSL", "криптоанализ", "квантовая криптография",
-"алгоритмы"
-],
-"Аудит и комплаенс": [
-"аудит безопасности", "security audit", "compliance", "ISO 27001",
-"PCI DSS", "GDPR", "регуляторные требования", "риск-менеджмент",
-"политики безопасности"
-],
-"AppSec": [
-"безопасность приложений", "application security", "DevSecOps", "SAST",
-"DAST", "SCA", "OWASP", "API security",
-"secure coding"
-],
-"Cloud Security": [
-"безопасность облаков", "cloud security", "AWS security", "Azure security",
-"GCP security", "CSPM", "CASB", "container security",
-"serverless security"
-],
-"DFIR": [
-"киберрасследования", "digital forensics", "incident response", "DFIR",
-"memory forensics", "disk forensics", "malware analysis", "threat hunting",
-"EDR"
-],
-"GRC": [
-"GRC", "governance", "risk management", "compliance",
-"регуляторные требования", "политики безопасности", "стандарты", "аудит",
-"risk assessment"
-],
-"Информационная безопасность (Другое)": [
-"CISO", "директор по безопасности", "security architect", "безопасность IoT",
-"безопасность ICS", "безопасность блокчейна", "криптоанализ", "стажер по безопасности",
-"junior security analyst"
-]
-}
-},
-    "Менеджмент": {
-"keywords": [
-"менеджер", "manager", "руководитель", "head",
-"директор", "director", "управление", "management", 
-"лидер", "leader", "team lead", "тимлид",
-"управляющий", "executive", "администратор", "supervisor"
-],
-"subcategories": {
-"Топ-менеджмент": [
-"генеральный директор", "CEO", "директор", "director",
-"исполнительный директор", "executive director", "управляющий партнер","managing partner",
-"президент компании", "president"
-],
-"Продуктовый менеджмент": [
-"продуктовый менеджер", "product manager", "PM", "product owner",
-"руководитель продукта", "head of product", "CPO", "директор по продукту",
-"product lead"
-],
-"Проектный менеджмент": [
-"проектный менеджер", "project manager", "PM", "руководитель проектов",
-"project lead", "PMP", "scrum master", "agile coach",
-"менеджер внедрения"
-],
-"ИТ-менеджмент": [
-"ИТ-директор", "CIO", "CTO", "руководитель IT",
-"директор по разработке", "head of development", "tech lead", "team lead",
-"руководитель отдела IT"
-],
-"Маркетинг-менеджмент": [
-"маркетинг-директор", "CMO", "head of marketing", "brand manager",
-"product marketing manager", "performance marketing manager", "digital marketing manager",
-"руководитель отдела маркетинга"
-],
-"Финансовый менеджмент": [
-"финансовый директор", "CFO", "financial manager", "head of finance",
-"контроллер", "controller", "FP&A manager", "казначей",
-"treasurer"
-],
-"Операционный менеджмент": [
-"операционный директор", "COO", "operations manager", "head of operations",
-"руководитель производства", "plant manager", "менеджер склада", "supply chain manager",
-"логистика"
-],
-"HR-менеджмент": [
-"HR-директор", "CHRO", "head of HR", "HRBP",
-"recruitment manager", "talent manager", "learning and development manager",
-"руководитель HR", "директор по персоналу"
-],
-"Офис-менеджмент": [
-"офис-менеджер", "office manager", "администратор офиса","executive assistant",
-"руководитель административного отдела", "head of administration", "менеджер по административной работе"
-],
-"Менеджмент (Другое)": [
-"менеджер по продажам", "sales manager", "account manager", "региональный менеджер",
-"менеджер филиала", "branch manager", "менеджер по работе с клиентами",
-"руководитель направления", "startup founder"
-]
-}
-},
-    "Дизайн": {
-"keywords": [
-"дизайнер", "designer", "дизайн", "design",
-"графика", "graphic", "визуал", "visual",
-"креатив", "creative", "ui", "ux",
-"иллюстрация", "illustration", "анимация", "animation"
-],
-"subcategories": {
-"Графический дизайн": [
-"графический дизайнер", "graphic designer", "дизайнер полиграфии", "print designer",
-"дизайнер упаковки", "packaging designer", "бренд-дизайнер", "brand designer",
-"дизайнер рекламы", "advertising designer"
-],
-"UI/UX дизайн": [
-"ui/ux дизайнер", "ui designer", "ux designer", "product designer",
-"дизайнер интерфейсов", "interface designer", "web designer", "mobile designer",
-"дизайнер приложений", "app designer"
-],
-"Моушн-дизайн": [
-"моушн-дизайнер", "motion designer", "аниматор", "animator",
-"2d анимация", "2d animation", "3d анимация", "3d animation",
-"видеодизайнер", "video designer"
-],
-"Иллюстрация": [
-"иллюстратор", "illustrator", "художник", "artist",
-"концепт-артист", "concept artist", "character designer", "дизайнер персонажей",
-"книжная иллюстрация", "book illustration"
-],
-"3D-дизайн": [
-"3d дизайнер", "3d designer", "3d artist", "3d визуализатор",
-"3d modeler", "3d моделлер", "blender artist", "cad designer",
-"архитектурная визуализация", "archviz"
-],
-"Гейм-дизайн": [
-"гейм-дизайнер", "game designer", "level designer", "дизайнер уровней",
-"ui дизайнер игр", "game ui designer", "ux дизайнер игр", "game ux designer",
-"концепт-артист игр", "game concept artist"
-],
-"Промышленный дизайн": [
-"промышленный дизайнер", "industrial designer", "дизайнер мебели", "furniture designer",
-"дизайнер продуктов", "product designer", "транспортный дизайн", "transportation design",
-"эргономика", "ergonomics"
-],
-"Фэшн-дизайн": [
-"дизайнер одежды", "fashion designer", "модельер", "designer одежды",
-"текстильный дизайн", "textile design", "дизайнер аксессуаров", "accessory designer",
-"обувной дизайн", "footwear design"
-],
-"Арт-дирекшн": [
-"арт-директор", "art director", "креативный директор", "creative director",
-"ведущий дизайнер", "lead designer", "дизайн-лид", "design lead",
-"бренд-директор", "brand director"
-],
-"Дизайн (Другое)": [
-"дизайнер интерьеров", "interior designer", "ландшафтный дизайнер", "landscape designer",
-"световой дизайн", "lighting design", "типографика", "typography",
-"дизайн-стажер", "design intern"
-]
+            "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
+            "Автоматизированное тестирование": ['test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
+            "Тестирование (Другое)": ["lead qa", "старший тестировщик", "главный тестировщик", "менеджер по качеству", "quality manager"]
 }
 }
 }
+
+
 
 # Парсим с hh и хабра и грузим в базу данных
 
@@ -343,7 +223,7 @@ def hh_parsing():
                         "link": item['alternate_url'],
                         'source': 'hh',
                         'vacancy_type': item['professional_roles'][0]['name'],
-                        'new_category': classify_vacancy(item['name'])
+                        'new_category': classify_vacancy(item['professional_roles'][0]['name'], item['name'])
                     }
                     all_vacancies.append(vacancy)
                 
@@ -362,23 +242,38 @@ def safe_find_text(element, selector, **kwargs):
     found = element.find(selector, **kwargs) if element else None
     return found.text.strip() if found else None
 
-def classify_vacancy(title, description=""):
+def classify_vacancy(title, vacancy_type,  description=""):
     """Классифицирует вакансию по названию и описанию"""
     text = f"{title} {description}".lower()
-    
-    # Сначала проверяем категории
-    for category, data in category_keywords.items():
-        if any(re.search(rf'{re.escape(keyword)}', text) for keyword in data["keywords"]):
+    vacancy_type = f"{vacancy_type} {title}".lower()
+    if text == 'аналитик' or  text == 'программист, разработчик' or text == 'тестировщик':
+      print('зашли')
+      for category, data in category_keywords_work.items():
+        if any(re.search(rf'{re.escape(keyword)}', vacancy_type) for keyword in data["keywords"]):
             # Затем проверяем подкатегории
             for subcategory, sub_keywords in data["subcategories"].items():
                 if not sub_keywords:  # Если нет ключевых слов - это "Другое"
                     continue
-                if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
+                if any(re.search(rf'\b{re.escape(sub_kw)}\b', vacancy_type) for sub_kw in sub_keywords):
                     return f"{category} | {subcategory}"
             # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
             return f"{category} | {category.split()[0]} (Другое)"
-    
+    else:
+      # Сначала проверяем категории
+      for category, data in category_keywords.items():
+          if any(re.search(rf'{re.escape(keyword)}', text) for keyword in data["keywords"]):
+              # Затем проверяем подкатегории
+              for subcategory, sub_keywords in data["subcategories"].items():
+                  if not sub_keywords:  # Если нет ключевых слов - это "Другое"
+                      continue
+                  if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
+                      return f"{category} | {subcategory}"
+              # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
+              return f"{category} | {category.split()[0]} (Другое)"
+
     return "Другое | Не определено"
+
+
 
 def get_vacancy_categories(element):
     """Извлекает категории вакансий из ссылок /vacancies/spec/"""
@@ -428,7 +323,7 @@ def habr_parsing():
                 "skills": ', '.join([skill.text for skill in i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x)]) if i.find_all('a', class_='link-comp', href=lambda x: x and '/skills/' in x) else '',
                 "link": "https://career.habr.com" + i.find('a', class_='vacancy-card__title-link')['href'] 
                     if i.find('a', class_='vacancy-card__title-link') else None,
-                "new_category" : classify_vacancy(safe_find_text(i, 'a', class_='vacancy-card__title-link')),
+                "new_category" : classify_vacancy(get_vacancy_categories(i), safe_find_text(i, 'a', class_='vacancy-card__title-link')),
                 "vacancy_type": get_vacancy_categories(i),  # Добавленные категории из /vacancies/spec/
                 "experience": get_vacancy_level(i)
                 }
