@@ -101,7 +101,7 @@ category_keywords = {
       "Data Science": [
         "data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист'
       ],
-      "ML Engineering": [
+      "ML Engineering & Mlops": [
         "ml engineer", "ml-engineer", "mlops", "model serving"
       ],
        "AI (Другое)": []
