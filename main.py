@@ -316,11 +316,11 @@ def habr_parsing():
                 if experience is None:
                     experience = 'Не указано'
                 elif (experience == 'Старший (Senior)') or (experience == 'Ведущий (Lead)') :
-                    experience = "3-6 года"
+                    experience = "От 3 до 6 лет"
                 elif experience == 'Стажёр (Intern)':
                     experience = "Нет опыта"
                 elif (experience == 'Средний (Middle)') or (experience == 'Младший (Junior)'):
-                    experience = "1-3 года"
+                    experience = "От 1 года до 3 лет"
                 
                 vacancy_list = {
                 "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
@@ -343,6 +343,7 @@ def habr_parsing():
                 break
         time.sleep(1)
     return a_list
+
 
 def parse_date(date_str):
     """Парсит дату из строки в формате '2025-06-25T13:02:24+0300'"""
