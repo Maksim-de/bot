@@ -17,7 +17,7 @@ category_keywords = {
  "Аналитика": {
     "keywords": [
       "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst',
-      'bi_developer', 'bi-аналитик, аналитик данных', 'cистемный аналитик'
+      'bi_developer', 'bi-аналитик, аналитик данных', 'cистемный аналитик', 'soc_analyst'
     ],
     "subcategories": {
       "Системный аналитик": [
