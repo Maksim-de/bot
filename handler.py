@@ -22,278 +22,123 @@ from markdown import markdown
 # import matplotlib.dates as mdates
 
 vacanciessss = []
-
+hr_vacanciess = []
 
 category_keywords = {
-    
-    "Аналитика": {
-        "keywords": ["аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
-        "subcategories": {
-            "Системный аналитик": ["системный аналитик", "system analyst", "аналитик требований", "business system analyst", "технический аналитик", "it analyst"],
-            "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "bpm-аналитик", "ba"],
-            "Аналитик данных": ["аналитик данных", "data analyst", "аналитик sql", "bi analyst", "аналитик отчетности", "data analytics specialist"],
-            "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "data product analyst", "аналитик продукта", "growth analyst"],
-            "Финансовый аналитик": ["финансовый аналитик", "financial analyst", "инвестиционный аналитик", "fp&a analyst", "аналитик бюджетирования"],
-            "Маркетинг-аналитик": ["маркетинг-аналитик", "marketing analyst", "crm-аналитик", "digital analyst", "аналитик рекламы", "media analyst"],
-            "Веб-аналитик": ["веб-аналитик", "web analyst", "google analytics analyst", "аналитик метрик", "аналитик трафика"],
-            "Другое": ["risk analyst", "аналитик безопасности", "hr analyst", "операционный аналитик", "аналитик поддержки"]
-}
+ "Аналитика": {
+    "keywords": [
+      "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst', 
+      'bi_developer', 'bi-аналитик, аналитик данных'
+    ],
+    "subcategories": {
+      "Системный аналитик": [
+        "системн", "systems_analyst",  "uml"
+      ],
+      "Бизнес аналитик": [
+        "бизнес", "business", 'бизнес-аналитик'
+      ],
+      "Data аналитик и BI": [
+        'data_analyst', 'bi-аналитик', "bi_developer", 'bi-аналитик, аналитик данных'
+      ],
+      "Продуктовый аналитик": [
+        "продуктов", "product", "a/b", "ab test", "a/b test", 'продуктовый аналитик'
+      ],
+      "Аналитик DWH": [
+        "data engineer", "dwh", "data warehouse", "airflow", "data lake",
+        "databricks", "spark", "hadoop", 'sql'
+      ],
+      "Веб-аналитик": [
+        "веб", "web",
+      ],
+      "Аналитик (другое)": []
+  }
 },
-   "Тестирование": {
-        "keywords": ["тестировщик", "tester", "qa", "quality assurance", "контроль качества", "тест", "test", "qa engineer", "инженер по тестированию"],
-        "subcategories": {
-            "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer"],
-            "Автоматизированное тестирование": ["автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
-            "Тестирование мобильных приложений": ["мобильный тестировщик", "mobile tester", "qa mobile", "тестировщик мобильных приложений", "mobile qa engineer"],
-            "Тестирование веб-приложений": ["веб-тестировщик", "web tester", "qa web", "тестировщик веб-приложений", "web qa engineer"],
-            "Тестирование игр": ["гейм тестировщик", "game tester", "qa game", "тестировщик игр", "game qa engineer"],
-            "Тестирование API": ["api тестировщик", "api tester", "qa api", "тестировщик api", "api qa engineer"],
-            "Тестирование безопасности": ["тестировщик безопасности", "security tester", "qa security", "пентестер", "security qa engineer"],
-            "Тестирование производительности": ["тестировщик производительности", "performance tester", "qa performance", "load tester", "performance qa engineer"],
-            "Тестирование (Другое)": ["lead qa", "старший тестировщик", "главный тестировщик", "менеджер по качеству", "quality manager"]
-}
+ "Тестирование": {
+    "keywords": [
+      "тестировщик", "tester", "qa", "quality assurance", "тестировщик-автоматизатор",
+      "qa engineer", "инженер по тестирован", "ручн тестирован", "автоматизирован тестирован",
+      "мобильн тестирован", "веб тестирован", "гейм тестирован", "api тестирован",
+      "безопасност тестирован", "производительност тестирован", "нагрузочн тестирован",
+      "интеграцион тестирован", "регрессион тестирован", "smoke тестирован", "приемочн тестирован",
+      "quality manager", "qa lead", "qa architect", 'manual_testing', 'test_automation', 'qa_engineer'
+    ],
+    "subcategories": {
+      "Ручное тестирование": [
+        "ручн тестировщик", 'ручное', 'ручного', 'manual_testing'
+      ],
+      "Автоматизированное тестирование": [
+        "автоматизатор тестирован", "automation tester", "qa automation", "test_automation"
+      ],
+     "Тестирование (Другое)": []
+    }
 },
-    
-    "Разработка": {
-        "keywords": ["разработчик", "developer", "программист", "engineer", "dev", "software", "приложений", "application", "код", "code"],
-        "subcategories": {
-            "Frontend разработка": ["frontend", "front-end", "front end", "javascript", "js", "react", "angular", "vue", "typescript", "ui developer"],
-            "Backend разработка": ["backend", "back-end", "back end", "server", "api", "python", "java", "php", "node", "nodejs", ".net", "ruby", "go", "golang"],
-            "Fullstack разработка": ["fullstack", "full-stack", "full stack", "универсальный разработчик","mern", "mean", "lamp"],
-            "Мобильная разработка": ["mobile", "android", "ios", "flutter", "react native", "котлин", "kotlin", "swift", "xamarin"],
-            "GameDev": ["game", "игр", "unity", "unreal", "геймдев", "cryengine", "gamedeveloper", "game programmer"],
-            "DevOps": ["devops", "sre", "site reliability", "инфраструктура", "docker", "kubernetes", "k8s", "terraform", "ansible"],
-            "Embedded/IoT": ["embedded", "встроенные", "iot", "arduino", "raspberry", "микроконтроллеры", "firmware", "драйверы"],
-            "Блокчейн": ["blockchain", "смарт-контракты", "solidity", "web3", "defi", "crypto", "крипто"],
-            "Разработка (Другое)": ["lead developer", "architect", "cto", "техлид", "research", "r&d", "стажер", "intern"]
-}
-    },
-    "AI (ИИ)": {
-        "keywords": ["nlp", "искусственный интеллект","computer vision", "cv", "ии", "ai", "artificial intelligence", "машинное обучение", "ml", "machine learning", "нейросети","deep learning", "data science"],
-        "subcategories": {
-            "Computer Vision": ["computer vision", "cv", "обработка изображений", "image processing","распознавание образов", "object detection", "openCV", "segmentation"],
-            "Natural Language Processing": [ "nlp", "natural language processing", "обработка текста", "text processing", "chatbot", "чат-бот", "transformer", "LLM","large language model" ],
-            "Data Science": ["data science", "ds", "data analysis", "feature engineering", "pandas", "numpy", "scikit-learn"],
-            "Deep Learning": ["deep learning", "глубокое обучение", "нейронные сети", "neural networks", "tensorflow", "pytorch", "keras"],
-            "ML Engineering": [ "ml engineer", "machine learning engineer", "инженер мл", "mlops", "deployment", "развертывание моделей", "model serving"],
-            "AI Research": ["ai researcher", "research scientist", "научный сотрудник", "публикации","publications", "sota", "state of the art"],
-            "ИИ (Другое)": ["ai стажер", "этика ии", "ai ethics", "ai intern", "ответственный ии", "ai консультант", "ai consultant","ai архитектор", "ai architect"
-]
-}
-    },
-    "Администрирование": {
-        "keywords": ["администратор", "administrator", "админ", "admin", "сетевой", "network","баз данных", "database", "сервер", "server","поддержка", "support", "техподдержка", "helpdesk"],
-        "subcategories": {
-            "Системный администратор": ["системный администратор", "system administrator", "sysadmin", "linux администратор","windows администратор", "unix администратор", "админ серверов", "server administrator"],
-            "Сетевой администратор": ["сетевой администратор", "network administrator", "админ сетей", "cisco администратор","junos администратор", "firewall администратор", "vpn администратор"],
-"Администратор баз данных": [
-"администратор баз данных", "dba", "database administrator", "mysql администратор",
-"postgresql администратор", "oracle dba", "mssql администратор", "mongodb администратор"
-],
-"DevOps/Администрирование": [
-"devops администратор", "sre", "site reliability engineer", "cloud администратор",
-"aws администратор", "azure администратор", "gcp администратор", "kubernetes администратор"
-],
-"Администратор 1С": [
-"администратор 1с", "1с администратор", "1с специалист", "1с поддержка",
-"1с настройка", "1с конфигурация", "1с разработка"
-],
-"Виртуализация и облака": [
-"администратор виртуализации", "vmware администратор", "hyper-v администратор", "kvm администратор",
-"openstack администратор", "docker администратор", "kubernetes администратор"
-],
-"Безопасность": [
-"администратор безопасности", "security administrator", "siem администратор", "soc администратор",
-"кибербезопасность", "cybersecurity", "pentest администратор"
-],
-"Техническая поддержка": [
-"администратор поддержки", "helpdesk администратор", "it support", "техподдержка",
-"service desk", "офисный администратор"
-],
-"Администрирование (Другое)": [
-"старший администратор", "lead administrator", "главный администратор", "стажер администратор", "junior administrator"
-]
-}
+ "Разработка": {
+    "keywords": [
+      "frontend", "front-end", "front end", "javascript", "js",
+      "react", "angular", "vue", "typescript", 'software',
+      "backend", 'devops', 'mobileapp_developer', "data_engineer", 'database_developer', 
+      "fullstack", "full-stack", "full stack", "DevOps-инженер"
+    ],
+    "subcategories": {
+      "Frontend разработка": [
+        "frontend", "front-end", "front end", "javascript", "js",
+        "react", "angular", "vue", "typescript", "ui developer"
+      ],
+      "Backend разработка": [
+        "backend", "back-end", "back end", "server", "api",
+        "python", "java", "php", "node", "nodejs", "net", "ruby", "go", "golang"
+      ],
+      "Fullstack разработка": [
+        "fullstack", "full-stack", "full stack", 
+      ],
+      "Мобильная разработка": [
+        "mobile", "android", "ios", "flutter", "react",
+        "котлин", "kotlin", "swift", "mobileapp_developer"
+      ],
+      "DevOps": [
+        "devops", "DevOps-инженер"
+      ], 
+      "Data engineer": [
+        "data_engineer", 'database_developer'
+      ],
+  "Разработка (Другое)": []
+    }
 },
-   "Информационная безопасность": {
-"keywords": [
-"безопасность", "security", "кибербезопасность", "cybersecurity",
-"защита", "protection", "аудит", "audit",
-"сетевой", "network", "pentest", "тестирование на проникновение",
-"compliance", "соответствие", "политики", "policies"
-],
-"subcategories": {
-"Аналитик безопасности": [
-"аналитик безопасности", "security analyst", "SOC analyst", "мониторинг безопасности",
-"инциденты", "incident response", "SIEM", "угрозы",
-"threat intelligence"
-],
-"Пентестер": [
-"тестирование на проникновение", "penetration tester", "этичный хакер", "ethical hacker",
-"red team", "vulnerability assessment", "web app pentest", "network pentest",
-"bug bounty"
-],
-"Сетевой безопасник": [
-"сетевой безопасник", "network security", "firewall", "IDS/IPS",
-"VPN", "DDoS protection", "NGFW", "ZTNA",
-"микросетевой сегментации"
-],
-"Криптограф": [
-"криптограф", "cryptography", "шифрование", "encryption",
-"PKI", "TLS/SSL", "криптоанализ", "квантовая криптография",
-"алгоритмы"
-],
-"Аудит и комплаенс": [
-"аудит безопасности", "security audit", "compliance", "ISO 27001",
-"PCI DSS", "GDPR", "регуляторные требования", "риск-менеджмент",
-"политики безопасности"
-],
-"AppSec": [
-"безопасность приложений", "application security", "DevSecOps", "SAST",
-"DAST", "SCA", "OWASP", "API security",
-"secure coding"
-],
-"Cloud Security": [
-"безопасность облаков", "cloud security", "AWS security", "Azure security",
-"GCP security", "CSPM", "CASB", "container security",
-"serverless security"
-],
-"DFIR": [
-"киберрасследования", "digital forensics", "incident response", "DFIR",
-"memory forensics", "disk forensics", "malware analysis", "threat hunting",
-"EDR"
-],
-"GRC": [
-"GRC", "governance", "risk management", "compliance",
-"регуляторные требования", "политики безопасности", "стандарты", "аудит",
-"risk assessment"
-],
-"Информационная безопасность (Другое)": [
-"CISO", "директор по безопасности", "security architect", "безопасность IoT",
-"безопасность ICS", "безопасность блокчейна", "криптоанализ", "стажер по безопасности",
-"junior security analyst"
-]
-}
+ "ML/AI/DS": {
+    "keywords": [ 
+      "ml engineer", "ml-engineer", "mlops", 'data_scientist', 'ml', 'ai', 'промт', 'дата-сайентист'
+    ],
+    "subcategories": {
+      "Data Science": [
+        "data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист'
+      ],
+      "ML Engineering & Mlops": [
+        "ml engineer", "ml-engineer", "mlops", "model serving"
+      ],
+       "AI (Другое)": []
+    }
 },
-    "Менеджмент": {
-"keywords": [
-"менеджер", "manager", "руководитель", "head",
-"директор", "director", "управление", "management", 
-"лидер", "leader", "team lead", "тимлид",
-"управляющий", "executive", "администратор", "supervisor"
-],
-"subcategories": {
-"Топ-менеджмент": [
-"генеральный директор", "CEO", "директор", "director",
-"исполнительный директор", "executive director", "управляющий партнер","managing partner",
-"президент компании", "president"
-],
-"Продуктовый менеджмент": [
-"продуктовый менеджер", "product manager", "PM", "product owner",
-"руководитель продукта", "head of product", "CPO", "директор по продукту",
-"product lead"
-],
-"Проектный менеджмент": [
-"проектный менеджер", "project manager", "PM", "руководитель проектов",
-"project lead", "PMP", "scrum master", "agile coach",
-"менеджер внедрения"
-],
-"ИТ-менеджмент": [
-"ИТ-директор", "CIO", "CTO", "руководитель IT",
-"директор по разработке", "head of development", "tech lead", "team lead",
-"руководитель отдела IT"
-],
-"Маркетинг-менеджмент": [
-"маркетинг-директор", "CMO", "head of marketing", "brand manager",
-"product marketing manager", "performance marketing manager", "digital marketing manager",
-"руководитель отдела маркетинга"
-],
-"Финансовый менеджмент": [
-"финансовый директор", "CFO", "financial manager", "head of finance",
-"контроллер", "controller", "FP&A manager", "казначей",
-"treasurer"
-],
-"Операционный менеджмент": [
-"операционный директор", "COO", "operations manager", "head of operations",
-"руководитель производства", "plant manager", "менеджер склада", "supply chain manager",
-"логистика"
-],
-"HR-менеджмент": [
-"HR-директор", "CHRO", "head of HR", "HRBP",
-"recruitment manager", "talent manager", "learning and development manager",
-"руководитель HR", "директор по персоналу"
-],
-"Офис-менеджмент": [
-"офис-менеджер", "office manager", "администратор офиса","executive assistant",
-"руководитель административного отдела", "head of administration", "менеджер по административной работе"
-],
-"Менеджмент (Другое)": [
-"менеджер по продажам", "sales manager", "account manager", "региональный менеджер",
-"менеджер филиала", "branch manager", "менеджер по работе с клиентами",
-"руководитель направления", "startup founder"
-]
-}
-},
-    "Дизайн": {
-"keywords": [
-"дизайнер", "designer", "дизайн", "design",
-"графика", "graphic", "визуал", "visual",
-"креатив", "creative", "ui", "ux",
-"иллюстрация", "illustration", "анимация", "animation"
-],
-"subcategories": {
-"Графический дизайн": [
-"графический дизайнер", "graphic designer", "дизайнер полиграфии", "print designer",
-"дизайнер упаковки", "packaging designer", "бренд-дизайнер", "brand designer",
-"дизайнер рекламы", "advertising designer"
-],
-"UI/UX дизайн": [
-"ui/ux дизайнер", "ui designer", "ux designer", "product designer",
-"дизайнер интерфейсов", "interface designer", "web designer", "mobile designer",
-"дизайнер приложений", "app designer"
-],
-"Моушн-дизайн": [
-"моушн-дизайнер", "motion designer", "аниматор", "animator",
-"2d анимация", "2d animation", "3d анимация", "3d animation",
-"видеодизайнер", "video designer"
-],
-"Иллюстрация": [
-"иллюстратор", "illustrator", "художник", "artist",
-"концепт-артист", "concept artist", "character designer", "дизайнер персонажей",
-"книжная иллюстрация", "book illustration"
-],
-"3D-дизайн": [
-"3d дизайнер", "3d designer", "3d artist", "3d визуализатор",
-"3d modeler", "3d моделлер", "blender artist", "cad designer",
-"архитектурная визуализация", "archviz"
-],
-"Гейм-дизайн": [
-"гейм-дизайнер", "game designer", "level designer", "дизайнер уровней",
-"ui дизайнер игр", "game ui designer", "ux дизайнер игр", "game ux designer",
-"концепт-артист игр", "game concept artist"
-],
-"Промышленный дизайн": [
-"промышленный дизайнер", "industrial designer", "дизайнер мебели", "furniture designer",
-"дизайнер продуктов", "product designer", "транспортный дизайн", "transportation design",
-"эргономика", "ergonomics"
-],
-"Фэшн-дизайн": [
-"дизайнер одежды", "fashion designer", "модельер", "designer одежды",
-"текстильный дизайн", "textile design", "дизайнер аксессуаров", "accessory designer",
-"обувной дизайн", "footwear design"
-],
-"Арт-дирекшн": [
-"арт-директор", "art director", "креативный директор", "creative director",
-"ведущий дизайнер", "lead designer", "дизайн-лид", "design lead",
-"бренд-директор", "brand director"
-],
-"Дизайн (Другое)": [
-"дизайнер интерьеров", "interior designer", "ландшафтный дизайнер", "landscape designer",
-"световой дизайн", "lighting design", "типографика", "typography",
-"дизайн-стажер", "design intern"
-]
-}
-}
+ "Менеджмент": {
+    "keywords": [
+      'менеджер продукта', 'руководитель группы разработки', 'руководитель отдела аналитики', "руководитель проектов", 'project_manager',
+      'project_director', 'product_manager', 'marketing_manager', 'account_manager'
+    ],
+
+    "subcategories": {
+      "Продуктовый менеджмент": [
+        "продуктов менеджер", "product manager", "PM", "product owner",
+        "руководитель продукт", "head of product", 'product_manager'
+      ],
+      "Проектный менеджмент": [
+        "проектн менеджер", "project manager", "PM", "руководитель проектов", 'project_manager', 'scrum_master', 'account_manager'
+      ],
+      "ИТ топ менеджмент": [
+        'руководитель группы разработки',  'руководитель отдела аналитики', 'технический директор (сто)',  'project_director'
+      ],
+
+"Менеджер (Другое)": []
+ }
+    }
 }
 
 
@@ -314,6 +159,8 @@ selected_subcategories = {}
 
 selected_cities = {}
 
+user_expierence = {}
+
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 from aiogram.filters import Command
 from aiogram import html as h
@@ -329,37 +176,19 @@ main_keyboard = ReplyKeyboardMarkup(keyboard=[
 # Меню категорий вакансий
 categories_keyboard = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Аналитика"), KeyboardButton(text="Разработка")],
-    [KeyboardButton(text="Тестирование"), KeyboardButton(text="AI (ИИ)")],
-    [KeyboardButton(text="Менеджмент"), KeyboardButton(text="Дизайн")],
-    [KeyboardButton(text="Безопасность"), KeyboardButton(text="Администрирование")],
-    [KeyboardButton(text="Готово")],  
-    [KeyboardButton(text="В главное меню")]
+    [KeyboardButton(text="Тестирование"), KeyboardButton(text="ML/AI/DS")],
+    [KeyboardButton(text="Менеджмент")],
+    [KeyboardButton(text="В главное меню"), KeyboardButton(text="Готово")]
 ], resize_keyboard=True)
 
-# Функция для создания клавиатуры подкатегорий
-def get_subcategories_keyboard(category: str, user_id: int = None) -> ReplyKeyboardMarkup:
-    builder = ReplyKeyboardBuilder()
-    subcategories = category_keywords[category]["subcategories"].keys()
-
-    # Добавляем кнопки подкатегорий (по 2 в ряд)
-    for subcategory in subcategories:
-        if user_id and str(user_id) in selected_subcategories and subcategory in selected_subcategories[str(user_id)]:
-            text_button = f"✅ {subcategory}"
-        else:
-            text_button = subcategory
-        builder.add(KeyboardButton(text=text_button))
-    builder.adjust(2)
-    print(selected_subcategories)
-    # print(selected_subcategories[str(user_id)])
-    # Добавляем кнопки управления (включая "Готово")
-    builder.row(
-        KeyboardButton(text="Назад в категории"),
-        KeyboardButton(text="Готово")
-        
-    )
-    # builder.row(KeyboardButton(text="В главное меню"))
+expierence_keyboard = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Нет опыта"), KeyboardButton(text="От 1 года до 3 лет")],
+    [KeyboardButton(text="От 3 до 6 лет"), KeyboardButton(text="Более 6 лет")],
+    [KeyboardButton(text="В главное меню"), KeyboardButton(text="Назад в категории"),]
     
-    return builder.as_markup(resize_keyboard=True)
+], resize_keyboard=True)
+
+
 
 
 
@@ -397,15 +226,53 @@ async def search_vacancies(message: Message):
 @router.message( lambda message: message.text in category_keywords.keys())
 async def handle_category(message: Message, state: FSMContext):
     category = message.text
+
     await state.set_state(Form.category)
     await state.update_data(current_category=category)
-    data = await state.get_data()
+    data = message.from_user.id
+
     user_id = str(data.get('user_id'))
     await message.answer(
         f"Выберите подкатегории для {category}:\n"
         "Можно выбрать несколько вариантов",
         reply_markup=get_subcategories_keyboard(category, user_id)
     )
+    
+
+
+# Функция для создания клавиатуры подкатегорий
+def get_subcategories_keyboard(category: str, user_id) -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    subcategories = category_keywords[category]["subcategories"].keys()
+
+    print('тут 3', selected_subcategories)
+    
+    # if str(user_id) in selected_subcategories:
+    #     print('тут', selected_subcategories[str(user_id)])
+    #     print('тут 2', selected_subcategories[int(user_id)])
+    #     print('тут 3', selected_subcategories)
+
+    # user_id = str(user_id)
+    
+    # Добавляем кнопки подкатегорий (по 2 в ряд)
+    for subcategory in subcategories:
+        if user_id and str(user_id) in selected_subcategories and subcategory in selected_subcategories[str(user_id)]:
+            text_button = f"✅ {subcategory}"
+        else:
+            text_button = subcategory
+        builder.add(KeyboardButton(text=text_button))
+    builder.adjust(2)
+    print(selected_subcategories[str(user_id)])
+    # Добавляем кнопки управления (включая "Готово")
+    builder.row(
+        KeyboardButton(text="Назад в категории"),
+        KeyboardButton(text="Готово")
+        
+    )
+    # builder.row(KeyboardButton(text="В главное меню"))
+    
+    return builder.as_markup(resize_keyboard=True)
+
 
 # Обработчик выбора подкатегорий
 @router.message(F.text, lambda message: any(
@@ -413,7 +280,10 @@ async def handle_category(message: Message, state: FSMContext):
     for cat in category_keywords.values() 
     for subcats in cat["subcategories"].keys()
 ))
-async def handle_subcategory(message: Message):
+async def handle_subcategory(message: Message, state: FSMContext):
+    global selected_subcategories
+    print('Вызываем эту функцию')
+
     user_id = str(message.from_user.id)
     # user_id = message.from_user.id
     subcategory = message.text.replace("✅ ", "")  # Удаляем эмодзи если есть
@@ -434,7 +304,9 @@ async def handle_subcategory(message: Message):
         cat for cat in category_keywords 
         if subcategory in category_keywords[cat]["subcategories"]
     )
-    
+
+    await state.update_data(selected_subcategories=selected_subcategories[user_id])
+
     selected = "\n".join(selected_subcategories.get(user_id, ["Пока ничего не выбрано"]))
     await message.answer(
         f"{action}: {subcategory}\n\n"
@@ -459,11 +331,49 @@ async def handle_subcategories_done(message: Message, state: FSMContext):
     selected = "\n".join(selected_subcategories[user_id])
     await message.answer(
         f"Вы выбрали:\n{selected}\n\n"
-        "Пожалуйста выберите или введите город...",
-        reply_markup=get_cities_keyboard(all_cities)
+        "Теперь выберите опыт работы:",
+        reply_markup=expierence_keyboard
+    )
+    await state.set_state(Form.waiting_for_experience)
+
+
+@router.message(Form.waiting_for_experience)
+async def handle_experience_selection(message: Message, state: FSMContext):
+    global user_expierence
+    user_id = str(message.from_user.id)
+    user_expierence[user_id] = message.text
+    if message.text != "Назад в категории":
+        await state.update_data(experience=message.text)
+        await state.set_state(Form.waiting_for_cities)
+        
+        await message.answer(
+            "Пожалуйста выберите или введите город...",
+            reply_markup=get_cities_keyboard(all_cities)
+        )
+    else:
+        await state.clear()
+        await message.answer("Возвращаемся к выбору категорий", reply_markup=categories_keyboard)
+
+@router.message(lambda message: message.text in ["Назад", "Назад в категории"])
+# async def back_to_categories(message: Message, state: FSMContext):
+#     await state.clear()
+#     await message.answer("Возвращаемся к выбору категорий", reply_markup=categories_keyboard)
+async def back_to_categories(message: Message, state: FSMContext):
+    # Получаем текущие данные БЕЗ очистки состояния
+    data = await state.get_data()
+    user_id = str(message.from_user.id)
+    
+    # Только сбрасываем текущую категорию
+    await state.update_data(current_category=None)
+    await state.set_state(Form.category)
+    
+    await message.answer(
+        "Возвращаемся к выбору категорий",
+        reply_markup=categories_keyboard
     )
 
-
+        
+    
 
     
 def get_cities_keyboard(all_cities,user_id: int = None) -> ReplyKeyboardMarkup:
@@ -480,13 +390,9 @@ def get_cities_keyboard(all_cities,user_id: int = None) -> ReplyKeyboardMarkup:
     priority_cities = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Екатеринбург", 'Красноярск', "Нижний Новгород", 'Челябинск', 'Уфа',
                        "Самара", "Ростов-на-Дону", 'Краснодар', "Омск", 'Воронеж', 'Пермь', 'Волгоград']
     
-    # Сортируем города: сначала приоритетные, затем остальные по алфавиту
+
     sorted_cities = priority_cities # + sorted(
-    #     [city for city in all_cities_now if city not in priority_cities],
-    #     key=lambda x: x.lower()
-    # )
-    
-    # Добавляем кнопки городов (по 2 в ряд)
+
     for city in sorted_cities:
         if user_id and str(user_id) in selected_cities and city in selected_cities[str(user_id)]:
             text_button = f"✅ {city}"
@@ -501,12 +407,30 @@ def get_cities_keyboard(all_cities,user_id: int = None) -> ReplyKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-@router.message(lambda message: message.text in ["Назад", "Назад в категории"])
-async def back_to_categories(message: Message):
-    await message.answer("Возвращаемся к выбору категорий", reply_markup=categories_keyboard)
 
 
-@router.message(F.text, lambda message: message.text.replace("✅ ", "") in all_cities)
+# @router.message(lambda message: message.text in ["Назад", "Назад в категории"])
+# async def back_to_categories(message: Message, state: FSMContext):
+#     # Получаем текущие данные перед очисткой
+#     data = await state.get_data()
+#     user_id = str(message.from_user.id)
+    
+#     # Сохраняем выбранные подкатегории (если есть)
+#     if user_id in selected_subcategories:
+#         # Можно также сохранить в state, если нужно
+#         pass  # Уже хранится в selected_subcategories
+    
+#     # Не очищаем полностью состояние, только сбрасываем текущий статус
+#     await state.set_state(Form.category)
+#     await state.update_data(current_category=None)  # Сбрасываем текущую категорию
+    
+#     await message.answer(
+#         "Возвращаемся к выбору категорий", 
+#         reply_markup=categories_keyboard()  # Убедитесь, что это ваша функция для клавиатуры категорий
+#     )
+
+
+@router.message(Form.waiting_for_cities, F.text, lambda message: message.text.replace("✅ ", "") in all_cities)
 async def handle_city_selection(message: Message):
     user_id = str(message.from_user.id)
     city = message.text.replace("✅ ", "")  # Удаляем эмодзи если есть
@@ -651,8 +575,10 @@ async def handle_general_resume(message: Message, state: FSMContext):
         await state.set_state(ResumeAnalysisStates.resume_text_stored)
 
         # Вызываем hot_resume для общей оценки
-        analysis_result = generating_answer_without_vacancy(extracted_text)  
+        analysis_result = await generating_answer_without_vacancy(extracted_text)  
         formatted_result = clean_and_format(analysis_result)
+
+        
         
         await message.answer(formatted_result, parse_mode="HTML")
         await message.answer(
@@ -689,13 +615,14 @@ def get_roast_categories_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="🔥 Аналитика"), KeyboardButton(text="🔥 Разработка")],
-            [KeyboardButton(text="🔥 Тестирование"), KeyboardButton(text="🔥 AI (ИИ)")],
+            [KeyboardButton(text="🔥 Тестирование"), KeyboardButton(text="🔥 ML/AI/DS")],
             [KeyboardButton(text="🔥 Менеджмент"), KeyboardButton(text="🔥 Дизайн")],
-            [KeyboardButton(text="🔥 Безопасность"), KeyboardButton(text="🔥 Администрирование")],
             [KeyboardButton(text="В главное меню")]
         ],
         resize_keyboard=True
+
     )
+
 @router.message(F.text, lambda message: message.text[2:] in category_keywords.keys())
 async def handle_roast_category(message: Message, state: FSMContext):
     """🔥 Обработчик выбора категории для прожарки"""
@@ -752,7 +679,7 @@ async def handle_roast_subcategory_selection(message: Message, state: FSMContext
     logger.info(f"Пользователь {message.from_user.id} начал прожарку резюме")
 
 @router.message(F.document, ResumeAnalysisStates.waiting_for_resume_fair)
-async def handle_general_resume(message: Message, state: FSMContext):
+async def handle_general_resume(message: Message, state: FSMContext, bot):
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="В главное меню")]],
         resize_keyboard=True
@@ -779,14 +706,21 @@ async def handle_general_resume(message: Message, state: FSMContext):
         #     return
         print('Прочитали')
         # await state.update_data(resume_text=extracted_text)
-        # await state.set_state(ResumeAnalysisStates.resume_text_stored)
 
-        # Вызываем hot_resume для общей оценки
 
-        print(hair_user)
-        print(hair_user[message.from_user.id])
-        print(extracted_text)
-        analysis_result = await hot_resume(extracted_text, hair_user[message.from_user.id])  
+       
+
+
+        # asyncio.create_task(
+        #     process_resume_analysis(message, extracted_text, hair_user[message.from_user.id], keyboard)
+        # )
+    
+        # print(hair_user)
+        # print(hair_user[message.from_user.id])
+        # print(extracted_text)
+
+        analysis_result = await hot_resume(extracted_text, hair_user[message.from_user.id])
+        # analysis_result = asyncio.create_task(hot_resume(extracted_text, hair_user[message.from_user.id]))
         formatted_result = clean_and_format(analysis_result)
         
         await message.answer(
@@ -799,7 +733,7 @@ async def handle_general_resume(message: Message, state: FSMContext):
             'Ошибка',
             parse_mode="HTML",
             reply_markup=keyboard)
-            
+   
     
 
 
@@ -964,13 +898,14 @@ async def forward_to_manager_trable(message: Message):
 async def hourly_db_update(bot: Bot):
     """Ежечасное обновление БД"""
     global vacanciessss
+    global hr_vacanciess
     while True:
         
         print(f"[{datetime.now()}] Запуск обновления БД...")
         print(selected_subcategories)
         await save_selected_subcategories()
         print('Данные загруженны')
-        vacanciessss = await load_and_cache_vacancies()
+        vacanciessss, hr_vacanciess = await load_and_cache_vacancies()
         print('загружены вакансии')
         await send_personalized_vacancies(bot)  
         print('рассылка завершена')
@@ -983,9 +918,9 @@ async def start_background_tasks(bot: Bot):
     global selected_subcategories
     global selected_cities
     global all_cities
-    # global vacanciessss
+    global user_expierence
 
-    loaded_data, all_cities, selected_cities = await load_selected_subcategories()
+    loaded_data, all_cities, selected_cities, user_expierence = await load_selected_subcategories()
     # vacanciessss = await load_and_cache_vacancxies()
     selected_subcategories.update(loaded_data)
     print(f"[{datetime.now()}] Загружено {len(loaded_data)} пользовательских выборов из БД")
@@ -1021,8 +956,18 @@ async def save_selected_subcategories():
                 json.dumps(list(cities), ensure_ascii=False),  # Преобразуем set в JSON
                 str(user_id)  
             )
-        
         print(f"[{datetime.now()}] Успешно сохранены города для {len(selected_cities)} пользователей")
+            # user_expierence
+        
+        for user_id, user_exp in user_expierence.items():
+            await conn.execute(
+                "UPDATE users SET experience = $1 WHERE user_id = $2",
+                json.dumps(list(user_exp), ensure_ascii=False),  # Преобразуем set в JSON
+                str(user_id)  
+            )
+        print(f"[{datetime.now()}] Успешно сохранены города для {len(user_expierence)} пользователей")
+        
+        
     
     except json.JSONEncodeError as e:
         print(f"[{datetime.now()}] Ошибка кодирования JSON: {e}")
@@ -1069,6 +1014,10 @@ async def load_selected_subcategories() -> dict:
             "SELECT user_id, cities FROM users WHERE cities IS NOT NULL"
         )
 
+        expierence_for_users = await conn.fetch(
+            "SELECT user_id, experience FROM users WHERE experience IS NOT NULL"
+        )
+
 
         # Формируем словарь selected_subcategories
         loaded_data = {}
@@ -1080,7 +1029,7 @@ async def load_selected_subcategories() -> dict:
             except json.JSONDecodeError as e:
                 print(f"Ошибка декодирования для user_id {record['user_id']}: {e}")
                 continue
-        print(f"Успешно загружено {len(loaded_data)} записей из БД")
+        print(f"Успешно загружено пользователей {len(loaded_data)} записей из БД")
 
         loaded_data_city = {}
         for record in city_for_users:
@@ -1091,9 +1040,21 @@ async def load_selected_subcategories() -> dict:
             except json.JSONDecodeError as e:
                 print(f"Ошибка декодирования для user_id {record['user_id']}: {e}")
                 continue
+        print(f"Успешно загружено городов {len(loaded_data_city)} записей из БД")
+
+        user_expierence = {}
+        for record in expierence_for_users:
+            try:
+                if record['experience']:
+                    # Декодируем JSON и преобразуем список в set
+                    user_expierence[record['user_id']] = set(record['experience'])
+            except:
+                print(f"Ошибка декодирования для user_id {record['user_id']}: {e}")
+                continue
+        print(f"Успешно загружено опыта {len(user_expierence)} записей из БД")
                 
-        print(f"Успешно загружено {len(loaded_data_city)} записей из БД")
-        return loaded_data, city_list, loaded_data_city
+        
+        return loaded_data, city_list, loaded_data_city, user_expierence
         
     except Exception as e:
         print(f"Ошибка при загрузке из БД: {e}")
@@ -1108,8 +1069,8 @@ async def load_selected_subcategories() -> dict:
 
 async def load_and_cache_vacancies():
     """
-    Загружает вакансии и пользовательские выборки из БД,
-    возвращает кортеж (vacancies_cache, user_selections)
+    Загружает обычные и HR-вакансии из БД,
+    возвращает кортеж (vacancies_cache, hr_vacancies_cache)
     """
     conn = None
     try:
@@ -1121,12 +1082,13 @@ async def load_and_cache_vacancies():
             password="Maksim1232145!"
         )
         
-        # 1. Загрузка вакансий
+        # 1. Загрузка обычных вакансий
         records = await conn.fetch(
-            "SELECT id, title, company, skills, location, experience, new_category, date, link FROM vacans WHERE date >= CURRENT_DATE - INTERVAL '1 day'"
+            "SELECT id, title, company, skills, location, experience, new_category, date, link "
+            "FROM vacans WHERE date >= CURRENT_DATE - INTERVAL '1 day' AND (is_hr != TRUE or is_hr is Null)" 
         )
         
-        # Кэшируем вакансии
+        # Кэшируем обычные вакансии
         vacancies = {
             str(record['id']): {
                 'title': record['title'],
@@ -1136,13 +1098,38 @@ async def load_and_cache_vacancies():
                 'experience': record['experience'],
                 'categories': record['new_category'].split("|")[1],
                 'date': record['date'],
-                'link': record['link']
+                'link': record['link'],
+                'is_hr': False
             }
             for record in records
         }
+        
+        # 2. Загрузка HR-вакансий
+        hr_records = await conn.fetch(
+            "SELECT id, title, company, skills, location, description, date, link, contact, experience, new_category "
+            "FROM vacans WHERE date >= CURRENT_DATE - INTERVAL '1 day' AND is_hr = TRUE"
+        )
+        
+        # Кэшируем HR-вакансии
+        hr_vacancies = {
+            str(record['id']): {
+                'title': record['title'],
+                'company': record['company'],
+                'skills': record['skills'],
+                'location': record['location'],
+                'experience': record['experience'],
+                'categories': record['new_category'].split("|")[1],
+                'description': record['description'],
+                'date': record['date'],
+                'link': record['link'],
+                'is_hr': True,
+                'contact': record['contact']
+            }
+            for record in hr_records
+        }
     
-        print('Вакансии успешно закешированы')
-        return vacancies
+        print('Вакансии успешно закешированы (обычные: {}, HR: {})'.format(len(vacancies), len(hr_vacancies)))
+        return vacancies, hr_vacancies
         
     except Exception as e:
         print(f"Ошибка загрузки данных: {e}")
@@ -1150,6 +1137,51 @@ async def load_and_cache_vacancies():
     finally:
         if conn:
             await conn.close()
+
+# async def load_and_cache_vacancies():
+#     """
+#     Загружает вакансии и пользовательские выборки из БД,
+#     возвращает кортеж (vacancies_cache, user_selections)
+#     """
+#     conn = None
+#     try:
+#         conn = await asyncpg.connect(
+#             host="pg4.sweb.ru",
+#             port=5433,
+#             database="maksimarkh",
+#             user="maksimarkh",
+#             password="Maksim1232145!"
+#         )
+        
+#         # 1. Загрузка вакансий
+#         records = await conn.fetch(
+#             "SELECT id, title, company, skills, location, experience, new_category, date, link FROM vacans WHERE date >= CURRENT_DATE - INTERVAL '1 day'"
+#         )
+        
+#         # Кэшируем вакансии
+#         vacancies = {
+#             str(record['id']): {
+#                 'title': record['title'],
+#                 'company': record['company'],
+#                 'skills': record['skills'],
+#                 'location': record['location'],
+#                 'experience': record['experience'],
+#                 'categories': record['new_category'].split("|")[1],
+#                 'date': record['date'],
+#                 'link': record['link']
+#             }
+#             for record in records
+#         }
+    
+#         print('Вакансии успешно закешированы')
+#         return vacancies
+        
+#     except Exception as e:
+#         print(f"Ошибка загрузки данных: {e}")
+#         return {}, {}
+#     finally:
+#         if conn:
+#             await conn.close()
 
 
 
@@ -1163,20 +1195,74 @@ send_vacancies = {}
 vacancy_counter = {}
 
 
+async def send_vacancies_to_user(bot: Bot, user_id: int, vacancies: list):
+    """Отправляет вакансии пользователю с возможной задержкой"""
+    for i, vac in enumerate(vacancies, 1):
+        message = [
+            "🔔 <b>Новые вакансии:</b>\n",
+            f"✨ <b>{vac['title']}</b>\n",
+            f"🏛 <i>{vac['company']}</i>\n\n",
+            f"🌍 <b>Локация:</b> {vac['location']}\n",
+            f"📆 <b>Опыт:</b> {vac['experience']}\n",
+            f"💼 <b>Навыки:</b> {vac['skills'][:150]} ...\n\n",
+            f"🔗 <a href='{vac['link']}'>Подробнее о вакансии</a>\n"
+            
+        ]
+        
+        await bot.send_message(
+            chat_id=user_id,
+            text="".join(message),
+            parse_mode="HTML"
+        )
+        await asyncio.sleep(1)
+        
+        # Если пользователь в списке для задержки и это каждая 3-я вакансия
+        if i % 3 == 0:
+            print(f"⏳ Отправлено 3 вакансии, пауза 10 минут для пользователя {user_id}...")
+            await asyncio.sleep(600)  # Задержка только для этого пользователя
+
+async def send_hr_vacancies_to_user(bot: Bot, user_id: int, vacancies: list):
+    """Отправляет HR-вакансии пользователю с возможной задержкой"""
+    for i, vac in enumerate(vacancies, 1):
+        message = [
+            "🔔 <b>Специальные HR-вакансии:</b>\n",
+            f"✨ <b>{vac['title']}</b>\n",
+            f"🏛 <i>{vac['company']}</i>\n\n",
+            f"🌍 <b>Локация:</b> {vac['location']}\n",
+            f"💼 <b>Навыки:</b> {vac['skills'][:150]}\n",
+            f"📝 <b>Описание:</b> {vac['description'][:500]} ...\n\n",
+            f"🔗 <b>Контакты для связи:</b> {vac['contact']}\n"
+        ]
+        
+        await bot.send_message(
+            chat_id=user_id,
+            text="".join(message),
+            parse_mode="HTML"
+        )
+        await asyncio.sleep(1)
+
+        print('Отправлена hr вакансия')
+        
+        if i % 3 == 0:
+            print(f"⏳ Отправлено 3 HR-вакансии, пауза 10 минут для пользователя {user_id}...")
+            await asyncio.sleep(600)
+
+
+
 
 async def send_personalized_vacancies(bot: Bot):
     """Рассылает только новые вакансии, появившиеся с последней проверки"""
     global vacancy_counter
-    print('начало рассылки')
-    print(len(vacanciessss))
-
+    print('Начало рассылки')
     try:
         current_time = datetime.now()
         
+        # 1. Фильтрация свежих вакансий
         fresh_vacancies = {}
+        fresh_hr_vacancies = {}
+
         for vid, v in vacanciessss.items():
             try:
-                # Пробуем разные форматы даты
                 try:
                     vacancy_date = datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S.%f')
                 except ValueError:
@@ -1187,66 +1273,92 @@ async def send_personalized_vacancies(bot: Bot):
             except Exception as e:
                 print(f"Ошибка парсинга даты для вакансии {vid}: {e}")
                 continue
-        if not fresh_vacancies:
+
+
+        for vid, v in hr_vacanciess.items():
+            try:
+                try:
+                    vacancy_date = datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S.%f')
+                except ValueError:
+                    vacancy_date = datetime.strptime(str(v['date']), '%Y-%m-%d %H:%M:%S')
+                
+                if vacancy_date >= current_time - timedelta(hours=24):
+                    fresh_hr_vacancies[vid] = v
+            except Exception as e:
+                print(f"Ошибка парсинга даты для вакансии {vid}: {e}")
+                continue
+        
+        
+
+        if not fresh_vacancies and not fresh_hr_vacancies:
             print(f"{current_time}: Нет новых вакансий для рассылки")
             return
             
-        # 2. Для каждого пользователя фильтруем вакансии
+        # 2. Создаем задачи для каждого пользователя
+        tasks = []
         for user_id, user_categories in selected_subcategories.items():
             user_cities = selected_cities.get(user_id, set())
             
+            # Фильтруем вакансии для пользователя
             matched_vacancies = [
-                v for v in fresh_vacancies.values()
-                if (v['location'] in user_cities and
-                    any(cat in v['categories'] for cat in user_categories))
+            v for v in fresh_vacancies.values()
+            if (v.get('location') is not None and  # Проверяем, что location не None
+                v['location'] in user_cities and
+                any(cat in v['categories'] for cat in user_categories) and
+                (v.get('experience') == user_expierence.get(user_id) or v.get('experience') == 'Не указано'))
             ]
 
-            previously_sent_links = {vac['link'] for vac in send_vacancies.get(user_id, [])}  # Извлекаем ссылки ранее отправленных вакансий
+            matched_hr_vacancies = [
+                v for v in fresh_hr_vacancies.values()
+                if (v.get('location') is not None and  
+                v['location'] in user_cities and
+                any(cat in v['categories'] for cat in user_categories) and
+                (v.get('experience') == user_expierence.get(user_id) or v.get('experience') == 'Не указано'))
+            ]
+            
+
+            # Исключаем уже отправленные
+            previously_sent_links = {vac['link'] for vac in send_vacancies.get(user_id, [])}
             new_matched_vacancies = [vac for vac in matched_vacancies if vac['link'] not in previously_sent_links]
 
-            # print(new_matched_vacancies)
-            print(matched_vacancies)
+            new_matched_hr_vacancies = [vac for vac in matched_hr_vacancies if vac['link'] not in previously_sent_links]
+
+            # Обновляем информацию об отправленных вакансиях
+            
+            if user_id in last_send_time:
+                time_since_last_send = current_time - last_send_time[user_id]
+                if time_since_last_send < timedelta(minutes=30):
+                    print(f"Пропускаем рассылку для {user_id} - не прошло 30 минут")
+                    continue
+            
+            print(new_matched_hr_vacancies)
+
+            if new_matched_hr_vacancies:
+                task = asyncio.create_task(
+                     send_hr_vacancies_to_user(bot, user_id, new_matched_hr_vacancies))
+                tasks.append(task)
+
             if new_matched_vacancies:
-                try:
-                    vacancy_counter[user_id] = 0
-                    for vac in matched_vacancies:
-                        message = ["🔔 <b>Новые вакансии:</b>\n"]
-                        message.append(
-                                f"✨ <b>{vac['title']}</b>\n"
-                                f"🏛 <i>{vac['company']}</i>\n\n"
-                                f"🌍 <b>Локация:</b> {vac['location']}\n"
-                                f"📆 <b>Опыт:</b> {vac['experience']}\n"
-                                f"💼 <b>Навыки:</b> {vac['skills'][:150]} ...\n\n"
-                                f"🔗 <a href='{vac['link']}'>Подробнее о вакансии</a>\n"
-                        )
+                    # Запускаем асинхронную задачу отправки
+                task = asyncio.create_task(
+                    send_vacancies_to_user(bot, user_id, new_matched_vacancies)
+                    )
+                tasks.append(task)
                     
-    
-                        await bot.send_message(
-                        chat_id=user_id,
-                        text="".join(message),
-                        parse_mode="HTML"
-                        )
+            
 
-                        # vacancy_counter[user_id]  += 1
-                        
-                        # # Если отправили 3 вакансии - делаем паузу
-                        # if vacancy_counter[user_id]  % 3 == 0:
-                        #     print(f"Отправлено 3 вакансии, делаем паузу 10 минут...")
-                        #     await asyncio.sleep(600)  # 10 минут = 600 секунд
-                    
-                    
-                    last_send_time[user_id] = current_time
-                    if user_id not in send_vacancies:
-                        send_vacancies[user_id] = []  # Initialize if this is the first time for this user
+            if new_matched_vacancies or new_matched_hr_vacancies:
+                if user_id not in send_vacancies:
+                    send_vacancies[user_id] = []
+                send_vacancies[user_id].extend(new_matched_vacancies + new_matched_hr_vacancies)
+                last_send_time[user_id] = current_time
 
-                    send_vacancies[user_id].extend(new_matched_vacancies)
-                    
-                except Exception as e:
-                    print(f"Ошибка отправки пользователю {user_id}: {e}")
-                    
+                
+        # Ожидаем завершения всех задач
+        await asyncio.gather(*tasks)
+        
     except Exception as e:
         print(f"Критическая ошибка в рассылке: {e}")
-
 
 
 
@@ -1269,7 +1381,7 @@ async def load_vacancies_for_analysis(vacancy_category):
         
         # 1. Загрузка вакансий
         records = await conn.fetch(
-            f"SELECT title, salary, skills, location, experience, link FROM vacans WHERE new_category like '%{vacancy_category}'"
+            f"SELECT title, salary, skills, location, experience, link FROM vacans WHERE new_category like '%{vacancy_category}' and date >= CURRENT_DATE - INTERVAL '2 day'"
         )
         print('скачали')
         return records
@@ -1293,7 +1405,7 @@ async def hot_resume(pdf_text, vacancy_category,  temp = 0.8):
 
         **Жесткие правила:**
         1. Только факты из резюме (не додумывай)
-        2. Сравнивай с вакансиями {vacancies}
+        2. Сравнивай с вакансиями {vacancies[:25]}
         3. Пиши как личный консультант (без шаблонов)
         4. Макс. 2500 символов
         5. Не используй курсив, используй теги <b> для выделения жирного текста.
@@ -1315,23 +1427,21 @@ async def hot_resume(pdf_text, vacancy_category,  temp = 0.8):
         {pdf_text}
         """
 
-    completion = client.chat.completions.create(
-        extra_headers={
+    loop = asyncio.get_event_loop()
+    completion = await loop.run_in_executor(
+        None,
+        lambda: client.chat.completions.create(
+            extra_headers={
             "HTTP-Referer": "<YOUR_SITE_URL>",  # Optional
             "X-Title": "<YOUR_SITE_NAME>",      # Optional
-        },
-        model="deepseek/deepseek-r1-0528:free",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=temp,  # 🔥 Указываем температуру (диапазон: 0.0–2.0)
-        # Другие параметры:
-        # max_tokens=4000,  # Ограничение длины ответа
-        # top_p=0.9,        # Альтернатива температуре
+            },
+            model="deepseek/deepseek-r1-0528:free",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temp
+        )
     )
+
+
     return completion.choices[0].message.content
 
 
