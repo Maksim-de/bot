@@ -322,11 +322,15 @@ def habr_parsing():
                 elif (experience == 'Средний (Middle)') or (experience == 'Младший (Junior)'):
                     experience = "От 1 года до 3 лет"
                 
+                location = safe_find_text(i, 'a', href=lambda x: x and 'city_id=' in x)
+
+                if location is None:
+                    location = 'Удаленная работа'
                 vacancy_list = {
                 "title": safe_find_text(i, 'a', class_='vacancy-card__title-link'),
                 "company": safe_find_text(i, 'a', class_='link-comp', href=lambda x: x and '/companies/' in x),
                 "date": datetime.now(),
-                "location": safe_find_text(i, 'a', href=lambda x: x and 'city_id=' in x),
+                "location": location,
                 'source' : 'habr',
                 "employment": safe_find_text(i, 'span', class_='preserve-line', string=lambda x: x and 'Полный рабочий день' in x),
                 "salary": safe_find_text(i, 'div', class_='basic-salary'),
@@ -343,7 +347,6 @@ def habr_parsing():
                 break
         time.sleep(1)
     return a_list
-
 
 def parse_date(date_str):
     """Парсит дату из строки в формате '2025-06-25T13:02:24+0300'"""
