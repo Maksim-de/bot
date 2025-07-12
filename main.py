@@ -290,7 +290,7 @@ def classify_vacancy(vacancy_type, title):
                             if sub_keyword in title:
                                 return f"{category} | {subcategory}"
                     # Если подкатегория не найдена
-                    return f"{category} | {category} (другое)"
+                    return f"{category} | {category} (Другое)"
     
     # Если тип вакансии не подошел, проверяем по vacancy_type
     for category in a_list:
