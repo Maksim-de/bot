@@ -21,7 +21,7 @@ category_keywords = {
     ],
     "subcategories": {
       "Системный аналитик": [
-        "системн", "systems_analyst",  "uml"
+        "системн", "systems_analyst",  "uml",  'cистемный аналитик'
       ],
       "Бизнес аналитик": [
         "бизнес", "business", 'бизнес-аналитик', 'business_analyst'
