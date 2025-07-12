@@ -17,14 +17,14 @@ category_keywords = {
  "Аналитика": {
     "keywords": [
       "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst', 
-      'bi_developer', 'bi-аналитик, аналитик данных'
+      'bi_developer', 'bi-аналитик, аналитик данных', 'systems_analyst'
     ],
     "subcategories": {
       "Системный аналитик": [
         "системн", "systems_analyst",  "uml"
       ],
       "Бизнес аналитик": [
-        "бизнес", "business", 'бизнес-аналитик'
+        "бизнес", "business", 'бизнес-аналитик', 'business_analyst'
       ],
       "Data аналитик & BI": [
         'data_analyst', 'bi-аналитик', "bi_developer", 'bi-аналитик, аналитик данных'
