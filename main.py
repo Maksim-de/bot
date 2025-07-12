@@ -158,14 +158,41 @@ category_keywords_work = {
      "Тестирование": {
         "keywords": ["тестировщик", "tester", "qa", "quality assurance", "manual_testing", "тест", "test", "qa engineer", "инженер по тестированию"],
         "subcategories": {
-            "Ручное тестирование": ['qa', "ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
-            "Автоматизированное тестирование": ['авто', 'test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
+            "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
+            "Автоматизированное тестирование": ['test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
             "Тестирование (Другое)": []
 }
+},
+     "ML/AI/DS": {
+        "keywords": ["ml", "ai", 'ds', "data science", "дата-сайентист"],
+         "subcategories": {
+            "Data Science": ["data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист', 'ds'],
+            "ML Engineering": ["engineer", "ml-engineer", "mlops", "model serving"],
+       "AI (Другое)": []
 }
+},
+ "Менеджмент": {
+    "keywords": [
+      'менеджер продукта', 'менеджер' 'руководитель группы разработки', 'руководитель отдела аналитики', "руководитель проектов", 'project_manager',
+      'project_director', 'product_manager', 'marketing_manager', 'account_manager', 'cio', 'технический директор (сто)', 'cto'
+    ],
+
+    "subcategories": {
+      "Продуктовый менеджмент": [
+        "продуктов менеджер", "product manager", "PM", "product owner",
+        "руководитель продукт", "head of product", 'product_manager', 'продукт'
+      ],
+      "Проектный менеджмент": [
+        "проектн менеджер", "project manager", "PM", "руководитель проектов", 'project_manager', 'scrum_master', 'account_manager'
+      ],
+      "ИТ топ менеджмент": [
+        'руководитель группы разработки',  'руководитель отдела аналитики', 'технический директор (сто)',  'project_director', 'cio', 'технический', 'cto'
+      ],
+
+"Менеджер (Другое)": []
+ }
+    }
 }
-
-
 
 # Парсим с hh и хабра и грузим в базу данных
 
@@ -245,42 +272,40 @@ def safe_find_text(element, selector, **kwargs):
     found = element.find(selector, **kwargs) if element else None
     return found.text.strip() if found else None
 
-# Определение функции классификации
-def classify_vacancy(title, vacancy_type,  description=""):
-    """Классифицирует вакансию по названию и описанию"""
-    text = f"{title} {description}".lower()
-    vacancy_type = f"{vacancy_type} {title}".lower()
-    vacancy_type = vacancy_type.strip().lower()
-    text = text.strip().lower()  
-    if text == 'аналитик' or  text == 'программист, разработчик' or text == 'тестировщик':
-      for category, data in category_keywords_work.items():
-        if any(re.search(rf'{re.escape(keyword)}', vacancy_type) for keyword in data["keywords"]):
-            # Затем проверяем подкатегории
-            for subcategory, sub_keywords in data["subcategories"].items():
-                if not sub_keywords: 
-                    print('другое', vacancy_type) 
-                    continue
-                # if any(re.search(rf'\b{re.escape(sub_kw)}\b', vacancy_type) for sub_kw in sub_keywords):
-                if any(keyword.lower() in vacancy_type for keyword in data["keywords"]):
-                    return f"{category} | {subcategory}"
-            # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
-            return f"{category} | {category.split()[0]} (Другое)"
-    else:
-      # Сначала проверяем категории
-      for category, data in category_keywords.items():
-          if any(re.search(rf'{re.escape(keyword)}', text) for keyword in data["keywords"]):
-              # Затем проверяем подкатегории
-              for subcategory, sub_keywords in data["subcategories"].items():
-                  if not sub_keywords:
-                      print('другое', text)
-                      continue
-                  # if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
-                  if any(keyword.lower() in text for keyword in data["keywords"]):
-                      return f"{category} | {subcategory}"
-              # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
-              return f"{category} | {category.split()[0]} (Другое)"
 
-    return "Другое | Не определено"
+def classify_vacancy(vacancy_type, title):
+    a_list = ['Аналитика', 'Тестирование', 'Разработка', 'ML/AI/DS', 'Менеджмент']
+    vacancy_type = vacancy_type.lower()
+    title = title.lower()
+    
+    # Сначала проверяем по заголовку, если тип вакансии подходящий
+    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик']:
+        # Проверяем категории по заголовку
+        for category in a_list:
+            for keyword in category_keywords_work[category]['keywords']:
+                if keyword in title:
+                    # Теперь проверяем подкатегории
+                    for subcategory in category_keywords_work[category]['subcategories']:
+                        for sub_keyword in category_keywords_work[category]['subcategories'][subcategory]:
+                            if sub_keyword in title:
+                                return f"{category} | {subcategory}"
+                    # Если подкатегория не найдена
+                    return f"{category} | {category} (другое)"
+    
+    # Если тип вакансии не подошел, проверяем по vacancy_type
+    for category in a_list:
+        for keyword in category_keywords[category]['keywords']:
+            if keyword in vacancy_type:
+                # Проверяем подкатегории
+                for subcategory in category_keywords[category]['subcategories']:
+                    for sub_keyword in category_keywords[category]['subcategories'][subcategory]:
+                        if sub_keyword in vacancy_type:
+                            return f"{category} | {subcategory}"
+                # Если подкатегория не найдена
+                return f"{category} | {category} (другое)"
+    
+    # Если ничего не найдено
+    return "Не определено | Не определено"
 
 
 
