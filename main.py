@@ -16,17 +16,17 @@ logger = logging.getLogger(__name__)
 category_keywords = {
  "Аналитика": {
     "keywords": [
-      "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst', 
-      'bi_developer', 'bi-аналитик, аналитик данных', 'systems_analyst'
+      "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst',
+      'bi_developer', 'bi-аналитик, аналитик данных', 'cистемный аналитик'
     ],
     "subcategories": {
       "Системный аналитик": [
-        "системн", "systems_analyst",  "uml",  'cистемный аналитик'
+        "системн", "systems_analyst",  "uml", 'cистемный аналитик', 'системный'
       ],
       "Бизнес аналитик": [
         "бизнес", "business", 'бизнес-аналитик', 'business_analyst'
       ],
-      "Data аналитик & BI": [
+      "Data аналитик и BI": [
         'data_analyst', 'bi-аналитик', "bi_developer", 'bi-аналитик, аналитик данных'
       ],
       "Продуктовый аналитик": [
@@ -65,8 +65,8 @@ category_keywords = {
     "keywords": [
       "frontend", "front-end", "front end", "javascript", "js",
       "react", "angular", "vue", "typescript", 'software',
-      "backend", 'devops', 'mobileapp_developer', "data_engineer", 'database_developer', 
-      "fullstack", "full-stack", "full stack", "DevOps-инженер"
+      "backend", 'devops', 'mobileapp_developer', "data_engineer", 'database_developer',
+      "fullstack", "full-stack", "full stack", "devops-инженер", 'database_architect', 'database_admin'
     ],
     "subcategories": {
       "Frontend разработка": [
@@ -78,7 +78,7 @@ category_keywords = {
         "python", "java", "php", "node", "nodejs", "net", "ruby", "go", "golang"
       ],
       "Fullstack разработка": [
-        "fullstack", "full-stack", "full stack", 
+        "fullstack", "full-stack", "full stack",
       ],
       "Мобильная разработка": [
         "mobile", "android", "ios", "flutter", "react",
@@ -86,22 +86,22 @@ category_keywords = {
       ],
       "DevOps": [
         "devops", "DevOps-инженер"
-      ], 
+      ],
       "Data engineer": [
-        "data_engineer", 'database_developer'
+        "data_engineer", 'database_developer', 'database_architect', 'database_admin'
       ],
   "Разработка (Другое)": []
     }
 },
  "ML/AI/DS": {
-    "keywords": [ 
+    "keywords": [
       "ml engineer", "ml-engineer", "mlops", 'data_scientist', 'ml', 'ai', 'промт', 'дата-сайентист'
     ],
     "subcategories": {
       "Data Science": [
         "data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист'
       ],
-      "ML Engineering & Mlops": [
+      "ML Engineering": [
         "ml engineer", "ml-engineer", "mlops", "model serving"
       ],
        "AI (Другое)": []
@@ -110,7 +110,7 @@ category_keywords = {
  "Менеджмент": {
     "keywords": [
       'менеджер продукта', 'руководитель группы разработки', 'руководитель отдела аналитики', "руководитель проектов", 'project_manager',
-      'project_director', 'product_manager', 'marketing_manager', 'account_manager'
+      'project_director', 'product_manager', 'marketing_manager', 'account_manager', 'cio', 'технический директор (сто)', 'cto'
     ],
 
     "subcategories": {
@@ -122,7 +122,7 @@ category_keywords = {
         "проектн менеджер", "project manager", "PM", "руководитель проектов", 'project_manager', 'scrum_master', 'account_manager'
       ],
       "ИТ топ менеджмент": [
-        'руководитель группы разработки',  'руководитель отдела аналитики', 'технический директор (сто)',  'project_director'
+        'руководитель группы разработки',  'руководитель отдела аналитики', 'технический директор (сто)',  'project_director', 'cio', 'технический', 'cto'
       ],
 
 "Менеджер (Другое)": []
@@ -131,34 +131,36 @@ category_keywords = {
 }
 
 category_keywords_work = {
-    
+
     "Аналитика": {
         "keywords": ["аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
         "subcategories": {
-            "Системный аналитик": ["системный", "system analyst"],
-            "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "bpm-аналитик", "бизнес"],
+            "Системный аналитик": ["системный", "system analyst", 'cистемный аналитик'],
+            "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "full stack", "бизнес"],
             "Data аналитик & BI": ["аналитик данных", "data", "данных", "bi", "аналитик отчетности", "data analytics specialist"],
             "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "продуктовый"],
             "Веб-аналитик": ["веб-аналитик", "web analyst", "google analytics analyst", "аналитик метрик", "аналитик трафика"],
             "Аналитик DWH": ["data engineer", "dwh", "data warehouse", "airflow", "data lake", "databricks", "spark", "hadoop", 'sql'],
-            "Другое": ["risk analyst", "аналитик безопасности", "hr analyst", "операционный аналитик", "аналитик поддержки"]
+            "Другое": []
 }
     },
     "Разработка": {
         "keywords": ["разработчик", "developer", "программист", "engineer", "dev", "software", "приложений", "application", "код", "code"],
         "subcategories": {
             "Frontend разработка": ["frontend", "front-end", "front end", "javascript", "js", "react", "angular", "vue", "typescript", "ui developer"],
-            "Backend разработка": ["backend", "back-end", "back end", "server", "api", "python", "java", "php", "node", "nodejs", ".net", "ruby", "go", "golang"],
+            "Backend разработка": ["backend", "back-end", "back end", "server", "api", "python", "java", "php", "node", "nodejs", "net", ".net", "go", "golang"],
             "Fullstack разработка": ["fullstack", "full-stack", "full stack", "универсальный разработчик","full", "mean", "lamp"],
-            "Разработка (Другое)": ["lead developer", "architect", "cto", "техлид", "research", "r&d", "стажер", "intern"]
+            "Мобильная разработка": ["mobile", "android", "ios", "flutter", "react", "котлин", "kotlin", "swift", "mobileapp_developer"],
+            "DevOps": ["devops", "DevOps-инженер"],
+            "Разработка (Другое)": []
 }
 },
      "Тестирование": {
         "keywords": ["тестировщик", "tester", "qa", "quality assurance", "manual_testing", "тест", "test", "qa engineer", "инженер по тестированию"],
         "subcategories": {
-            "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
-            "Автоматизированное тестирование": ['test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
-            "Тестирование (Другое)": ["lead qa", "старший тестировщик", "главный тестировщик", "менеджер по качеству", "quality manager"]
+            "Ручное тестирование": ['qa', "ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
+            "Автоматизированное тестирование": ['авто', 'test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
+            "Тестирование (Другое)": []
 }
 }
 }
@@ -243,19 +245,23 @@ def safe_find_text(element, selector, **kwargs):
     found = element.find(selector, **kwargs) if element else None
     return found.text.strip() if found else None
 
+# Определение функции классификации
 def classify_vacancy(title, vacancy_type,  description=""):
     """Классифицирует вакансию по названию и описанию"""
     text = f"{title} {description}".lower()
     vacancy_type = f"{vacancy_type} {title}".lower()
+    vacancy_type = vacancy_type.strip().lower()
+    text = text.strip().lower()  
     if text == 'аналитик' or  text == 'программист, разработчик' or text == 'тестировщик':
-      print('зашли')
       for category, data in category_keywords_work.items():
         if any(re.search(rf'{re.escape(keyword)}', vacancy_type) for keyword in data["keywords"]):
             # Затем проверяем подкатегории
             for subcategory, sub_keywords in data["subcategories"].items():
-                if not sub_keywords:  # Если нет ключевых слов - это "Другое"
+                if not sub_keywords: 
+                    print('другое', vacancy_type) 
                     continue
-                if any(re.search(rf'\b{re.escape(sub_kw)}\b', vacancy_type) for sub_kw in sub_keywords):
+                # if any(re.search(rf'\b{re.escape(sub_kw)}\b', vacancy_type) for sub_kw in sub_keywords):
+                if any(keyword.lower() in vacancy_type for keyword in data["keywords"]):
                     return f"{category} | {subcategory}"
             # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
             return f"{category} | {category.split()[0]} (Другое)"
@@ -265,9 +271,11 @@ def classify_vacancy(title, vacancy_type,  description=""):
           if any(re.search(rf'{re.escape(keyword)}', text) for keyword in data["keywords"]):
               # Затем проверяем подкатегории
               for subcategory, sub_keywords in data["subcategories"].items():
-                  if not sub_keywords:  # Если нет ключевых слов - это "Другое"
+                  if not sub_keywords:
+                      print('другое', text)
                       continue
-                  if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
+                  # if any(re.search(rf'\b{re.escape(sub_kw)}\b', text) for sub_kw in sub_keywords):
+                  if any(keyword.lower() in text for keyword in data["keywords"]):
                       return f"{category} | {subcategory}"
               # Если подкатегория не найдена, возвращаем основную категорию + "Другое"
               return f"{category} | {category.split()[0]} (Другое)"
