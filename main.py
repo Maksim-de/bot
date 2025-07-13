@@ -220,6 +220,11 @@ def hh_parsing():
         [  '107', '124', '125'] #,  # Другие специалисты
         # ['12', '25', '34', '155', '112','113', '114', '116', '121', '126']
     ]
+    
+    priority_cities = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Екатеринбург", 'Красноярск', 
+                       "Нижний Новгород", 'Челябинск', 'Уфа',
+                       "Самара", "Ростов-на-Дону", 'Краснодар', "Омск", 'Воронеж', 'Пермь', 'Волгоград']
+
 
     all_vacancies = []
     
@@ -243,21 +248,22 @@ def hh_parsing():
                     break
                     
                 for item in data['items']:
-                    vacancy = {
-                        "title": item['name'],
-                        "company": item['employer']['name'],
-                        "date": item['published_at'],
-                        "location": item['area']['name'],
-                        "employment": item['employment']['name'],
-                        "experience": item['experience']['name'],
-                        "salary": item.get('salary'),
-                        "skills": item['snippet']['requirement'],
-                        "link": item['alternate_url'],
-                        'source': 'hh',
-                        'vacancy_type': item['professional_roles'][0]['name'],
-                        'new_category': classify_vacancy(item['professional_roles'][0]['name'], item['name'])
-                    }
-                    all_vacancies.append(vacancy)
+                    if item['area']['name'] in priority_cities:
+                      vacancy = {
+                          "title": item['name'],
+                          "company": item['employer']['name'],
+                          "date": item['published_at'],
+                          "location": item['area']['name'],
+                          "employment": item['employment']['name'],
+                          "experience": item['experience']['name'],
+                          "salary": item.get('salary'),
+                          "skills": item['snippet']['requirement'],
+                          "link": item['alternate_url'],
+                          'source': 'hh',
+                          'vacancy_type': item['professional_roles'][0]['name'],
+                          'new_category': classify_vacancy(item['professional_roles'][0]['name'], item['name'])
+                      }
+                      all_vacancies.append(vacancy)
                 
                 # print(f"Группа {group[:3]}..., Страница {page}: {len(data['items'])} вакансий")
                 page += 1
@@ -268,7 +274,6 @@ def hh_parsing():
                 break
     
     return all_vacancies
-
 
 def safe_find_text(element, selector, **kwargs):
     found = element.find(selector, **kwargs) if element else None
