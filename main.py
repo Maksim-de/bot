@@ -619,12 +619,9 @@ def main():
         superjob_list = superjob_parsing()
         logger.info("Superjob загрузило...")
 
-        print(len(hh_list))
-        print(len(habr_list))
-        print(len(superjob_list))
+    
         
-        
-        if hh_list or habr_list:
+        if hh_list or habr_list or superjob_list:
             logger.info("Начало загрузки в базу данных")
             loading_to_base(hh_list, habr_list, superjob_list)
             
