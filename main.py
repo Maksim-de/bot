@@ -13,6 +13,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 category_keywords = {
  "Аналитика": {
     "keywords": [
@@ -21,7 +22,7 @@ category_keywords = {
     ],
     "subcategories": {
       "Системный аналитик": [
-        "системн", "systems_analyst",  "uml", 'cистемный аналитик', 'системный'
+        "системн", "systems_analyst",  "uml", 'cистемный аналитик', 'системный', 'systems'
       ],
       "Бизнес аналитик": [
         "бизнес", "business", 'бизнес-аналитик', 'business_analyst'
@@ -66,7 +67,7 @@ category_keywords = {
       "frontend", "front-end", "front end", "javascript", "js",
       "react", "angular", "vue", "typescript", 'software',
       "backend", 'devops', 'mobileapp_developer', "data_engineer", 'database_developer',
-      "fullstack", "full-stack", "full stack", "devops-инженер", 'database_architect', 'database_admin'
+      "fullstack", "full-stack", "full stack", "devops-инженер", 'database_architect', 'database_admin', 'баз данных', 'разработка'
     ],
     "subcategories": {
       "Frontend разработка": [
@@ -82,13 +83,13 @@ category_keywords = {
       ],
       "Мобильная разработка": [
         "mobile", "android", "ios", "flutter", "react",
-        "котлин", "kotlin", "swift", "mobileapp_developer"
+        "котлин", "kotlin", "swift", "mobileapp_developer", 'мобильная'
       ],
       "DevOps": [
         "devops", "DevOps-инженер"
       ],
       "Data engineer": [
-        "data_engineer", 'database_developer', 'database_architect', 'database_admin'
+        "data_engineer", 'database_developer', 'database_architect', 'database_admin', 'баз данных'
       ],
   "Разработка (Другое)": []
     }
@@ -135,7 +136,7 @@ category_keywords_work = {
     "Аналитика": {
         "keywords": ["аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
         "subcategories": {
-            "Системный аналитик": ["системный", "system analyst", 'cистемный аналитик'],
+            "Системный аналитик": ["системный", "system analyst", 'cистемный аналитик', 'systems', 'systems analyst', 'ystem'],
             "Бизнес-аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "full stack", "бизнес"],
             "Data аналитик & BI": ["аналитик данных", "data", "данных", "bi", "аналитик отчетности", "data analytics specialist"],
             "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "продуктовый"],
@@ -159,7 +160,7 @@ category_keywords_work = {
         "keywords": ["тестировщик", "tester", "qa", "quality assurance", "manual_testing", "тест", "test", "qa engineer", "инженер по тестированию"],
         "subcategories": {
             "Ручное тестирование": ["ручной тестировщик", "manual tester", "qa manual", "тестировщик ручного тестирования", "manual qa engineer", 'manual_testing'],
-            "Автоматизированное тестирование": ['test_automation', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
+            "Автоматизированное тестирование": ['test_automation', 'qa', "автоматизатор тестирования", "automation tester", "qa automation", "инженер по автоматизации тестирования", "automation qa engineer"],
             "Тестирование (Другое)": []
 }
 },
@@ -193,6 +194,7 @@ category_keywords_work = {
  }
     }
 }
+
 
 # Парсим с hh и хабра и грузим в базу данных
 
@@ -279,7 +281,7 @@ def classify_vacancy(vacancy_type, title):
     title = title.lower()
     
     # Сначала проверяем по заголовку, если тип вакансии подходящий
-    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик']:
+    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик', 'аналитика', 'разработка, программирование']:
         # Проверяем категории по заголовку
         for category in a_list:
             for keyword in category_keywords_work[category]['keywords']:
@@ -308,7 +310,6 @@ def classify_vacancy(vacancy_type, title):
     return "Не определено | Не определено"
 
 
-
 def get_vacancy_categories(element):
     """Извлекает категории вакансий из ссылок /vacancies/spec/"""
     categories = []
@@ -330,7 +331,95 @@ def get_vacancy_level(element):
             return level_link.text.strip()
     return None
 
+def superjob_parsing():
+    a_list = []
+    pages_to_check = 5
 
+    headers = {
+        "X-Api-App-Id": "v3.r.139164433.23ffc5190afedc15a75557bfecf0d17712201794.e87743a3f683bb304e7389b40f1fc40b4a1cbefa"
+    }
+
+    # Ключи нужных подкатегорий: аналитика, разработка, тестирование, ML/AI/DS, менеджмент
+
+    target_keys = {627, 628, 36, 37, 38, 503, 42, 604, 650, 47,48, 50,56, 613, 605, 630, 61}
+    priority_cities = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Екатеринбург", 'Красноярск', 
+                       "Нижний Новгород", 'Челябинск', 'Уфа',
+                       "Самара", "Ростов-на-Дону", 'Краснодар', "Омск", 'Воронеж', 'Пермь', 'Волгоград']
+
+    for page in range(pages_to_check):
+        params = {
+            "page": page,
+            "count": 100,
+            "catalogues": 33  # IT-вакансии
+        }
+
+        response = requests.get("https://api.superjob.ru/2.0/vacancies/", headers=headers, params=params)
+
+        if response.status_code != 200:
+            print("Ошибка запроса:", response.status_code)
+            continue
+
+        vacancies = response.json().get("objects", [])
+
+        for vac in vacancies:
+            moscow_tz = timezone(timedelta(hours=3))
+            pub_date = datetime.fromtimestamp(vac.get("date_published", 0), tz=moscow_tz)
+
+            # Пропускаем вакансии старше 1 суток
+            if datetime.now(moscow_tz) - pub_date > timedelta(days=1):
+                continue
+
+            # 🔽 Фильтрация по подкатегориям (positions.key)
+            subcatalog_keys = {
+                pos.get("key")
+                for cat in vac.get("catalogues", [])
+                for pos in cat.get("positions", [])
+            }
+            if not subcatalog_keys & target_keys:
+                continue  # пропускаем, если ни одна подкатегория не совпадает
+
+            # Обработка опыта
+            experience_raw = vac.get("experience", {}).get("title", "").lower()
+            if "без опыта" in experience_raw:
+                experience = "Нет опыта"
+            elif "1 год" in experience_raw:
+                experience = "От 1 года до 3 лет"
+            elif "3 лет" in experience_raw:
+                experience = "От 3 до 6 лет"
+            elif "6 лет" in experience_raw:
+                experience = "Более 6 лет"
+            else:
+                experience = "Не указано"
+
+            # Категории
+            # categories = [pos["title"] for cat in vac.get("catalogues", []) for pos in cat.get("positions", [])]
+
+            categories = vac.get('catalogues')[0]['positions'][0]['key']
+            city = vac.get("town", {}).get("title", "Не указано")
+            classify = vac.get('catalogues')[0]['positions'][0]['title']
+
+            if (categories in target_keys) and  (city in priority_cities):
+
+              vacancy_data = {
+                  "title": vac.get("profession", "Не указано"),
+                  "company": vac.get("firm_name", "Не указано"),
+                  "date": pub_date.strftime('%Y-%m-%d %H:%M:%S'),
+                  "location": city,
+                  "source": "superJob",
+                  "employment": vac.get("type_of_work", {}).get("title", "Не указано"),
+                  "salary": f"{vac.get('payment_from', 0)} - {vac.get('payment_to', 0)} {vac.get('currency', '').upper()}",
+                  "skills": vac.get("candidat", ""),
+                  "link": vac.get("link"),
+                  "new_category": classify_vacancy(classify, vac.get("profession", "Не указано")),
+                  "vacancy_type": classify,
+                  "experience": experience
+              }
+
+              a_list.append(vacancy_data)
+
+        time.sleep(1)
+
+    return a_list
 
 def habr_parsing():
     a_list = []
@@ -417,7 +506,7 @@ def parse_russian_date(date_str):
     
     return datetime(year=year, month=month, day=day)
 
-def loading_to_base(hh_list, habr_list):
+def loading_to_base(hh_list, habr_list, superjob_list):
     conn = psycopg2.connect(
         host="pg4.sweb.ru",
         port=5433,
@@ -481,6 +570,29 @@ def loading_to_base(hh_list, habr_list):
             i['new_category']
 
             ))
+
+    for i in superjob_list:
+        if i['link'] not in link_list:
+            date_value = parse_date(i['date'])
+
+            cursor.execute("""
+            INSERT INTO vacans (title, company, date, employment, salary, skills, link, location, source, vacancy_type, experience, new_category)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+            i['title'],
+            i['company'],
+            date_value,
+            i['employment'],
+            str(i['salary']),
+            i['skills'],
+            i['link'],
+            i['location'],
+            i['source'],
+            i['vacancy_type'],
+            i['experience'],
+            i['new_category']
+
+            ))
     conn.commit()
     cursor.close()
     conn.close()
@@ -493,11 +605,13 @@ def main():
         logger.info("HH загрузило...")
         habr_list = habr_parsing()
         logger.info("Habr загрузило...")
+        superjob_list = superjob_parsing()
+        logger.info("Superjob загрузило...")
         
         
         if hh_list or habr_list:
             logger.info("Начало загрузки в базу данных")
-            loading_to_base(hh_list, habr_list)
+            loading_to_base(hh_list, habr_list, superjob_list)
             
     except Exception as e:
         logger.error(f"Ошибка: {e}", exc_info=True)
