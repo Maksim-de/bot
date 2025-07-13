@@ -309,7 +309,7 @@ def classify_vacancy(vacancy_type, title):
                         if sub_keyword in vacancy_type:
                             return f"{category} | {subcategory}"
                 # Если подкатегория не найдена
-                return f"{category} | {category} (другое)"
+                return f"{category} | {category} (Другое)"
     
     # Если ничего не найдено
     return "Не определено | Не определено"
