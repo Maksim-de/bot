@@ -336,6 +336,9 @@ def get_vacancy_level(element):
             return level_link.text.strip()
     return None
 
+
+
+
 def superjob_parsing():
     a_list = []
     pages_to_check = 5
@@ -365,13 +368,15 @@ def superjob_parsing():
             continue
 
         vacancies = response.json().get("objects", [])
+        today = datetime.now()  # Теперь это datetime, а не date
+        
+    
 
         for vac in vacancies:
-            moscow_tz = timezone(timedelta(hours=3))
-            pub_date = datetime.fromtimestamp(vac.get("date_published", 0), tz=moscow_tz)
-
+            
+            pub_date = datetime.fromtimestamp(vac.get("date_published", 0))
             # Пропускаем вакансии старше 1 суток
-            if datetime.now(moscow_tz) - pub_date > timedelta(days=1):
+            if today - pub_date > timedelta(days=1):
                 continue
 
             # 🔽 Фильтрация по подкатегориям (positions.key)
@@ -425,6 +430,7 @@ def superjob_parsing():
         time.sleep(1)
 
     return a_list
+
 
 def habr_parsing():
     a_list = []
@@ -612,6 +618,10 @@ def main():
         logger.info("Habr загрузило...")
         superjob_list = superjob_parsing()
         logger.info("Superjob загрузило...")
+
+        print(len(hh_list))
+        print(len(habr_list))
+        print(len(superjob_list))
         
         
         if hh_list or habr_list:
