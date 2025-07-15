@@ -117,7 +117,7 @@ category_keywords = {
     "subcategories": {
       "Продуктовый менеджмент": [
         "продуктов менеджер", "product manager", "PM", "product owner",
-        "руководитель продукт", "head of product", 'product_manager'
+        "руководитель продукт", "head of product", 'product_manager', 'менеджер продукта'
       ],
       "Проектный менеджмент": [
         "проектн менеджер", "project manager", "PM", "руководитель проектов", 'project_manager', 'scrum_master', 'account_manager'
