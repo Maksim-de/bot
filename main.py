@@ -213,6 +213,8 @@ def hh_parsing():
     date_from = yesterday.strftime("%Y-%m-%dT00:00:00")
     date_to = today.strftime("%Y-%m-%dT23:59:59")
 
+    a_list_link = ['1']
+
     # Разбиваем роли на 3 логические группы для балансировки нагрузки
     role_groups = [
         ['156', '148', '160', '10',  '150', '165'],  # IT и управление
@@ -248,7 +250,7 @@ def hh_parsing():
                     break
                     
                 for item in data['items']:
-                    if item['area']['name'] in priority_cities:
+                    if (item['area']['name'] in priority_cities) and (item['alternate_url'] not in a_list_link):
                       vacancy = {
                           "title": item['name'],
                           "company": item['employer']['name'],
@@ -264,6 +266,7 @@ def hh_parsing():
                           'new_category': classify_vacancy(item['professional_roles'][0]['name'], item['name'])
                       }
                       all_vacancies.append(vacancy)
+                      a_list_link.append(item['alternate_url'])
                 
                 # print(f"Группа {group[:3]}..., Страница {page}: {len(data['items'])} вакансий")
                 page += 1
