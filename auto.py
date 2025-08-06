@@ -118,7 +118,7 @@ async def send_vacanc(access_token, resume_id, vacancy_id):
 
     response = requests.post(url, headers=headers, files=files)
     return response
-def main():
+async def main():
     try:
         logger.info("Запуск рассылки...")
         users = await get_users()
@@ -139,6 +139,6 @@ def main():
         logger.error(f"Ошибка: {e}", exc_info=True)
 
 if __name__ == "__main__":
-    main()
+    await main()
 
 
