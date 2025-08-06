@@ -107,21 +107,27 @@ async def send_vacanc(access_token, resume_id, vacancy_id):
 
     response = requests.post(url, headers=headers, files=files)
     return response
+def main():
+    try:
+        logger.info("Запуск парсера...")
+        users = await get_users()
+        for user in users['message']:
+            print(user)
+            vacanc_for_user = await load_vacancies_for_send(user['new_category_auto'], user['location_auto'], user['experience_auto'])
+            print(len(vacanc_for_user))
+            cou = 0
+            for vacancy in vacanc_for_user[:25]:
+                try:
+                    otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy)
+                    cou +=1
+                except Exception as e:
+                    print('ошибка', e)
+            print(cou)
+            
+    except Exception as e:
+        logger.error(f"Ошибка: {e}", exc_info=True)
 
+if __name__ == "__main__":
+    main()
 
-
-users = await get_users()
-
-for user in users['message']:
-    print(user)
-    vacanc_for_user = await load_vacancies_for_send(user['new_category_auto'], user['location_auto'], user['experience_auto'])
-    print(len(vacanc_for_user))
-    cou = 0
-    for vacancy in vacanc_for_user[:25]:
-        try:
-            otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy)
-            cou +=1
-        except Exception as e:
-            print('ошибка', e)
-    print(cou)
 
