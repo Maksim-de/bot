@@ -1,6 +1,17 @@
 import asyncpg
 import requests
 
+
+import logging
+import time
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
+
 async def get_users():
     conn = None
     try:
@@ -109,19 +120,19 @@ async def send_vacanc(access_token, resume_id, vacancy_id):
     return response
 def main():
     try:
-        logger.info("Запуск парсера...")
+        logger.info("Запуск рассылки...")
         users = await get_users()
         for user in users['message']:
-            print(user)
+            logger.info(f"Обработка юзера {user}")
             vacanc_for_user = await load_vacancies_for_send(user['new_category_auto'], user['location_auto'], user['experience_auto'])
-            print(len(vacanc_for_user))
+            logger.info(f"Загружено вакансий {len(vacanc_for_user)}")
             cou = 0
             for vacancy in vacanc_for_user[:25]:
                 try:
                     otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy)
                     cou +=1
                 except Exception as e:
-                    print('ошибка', e)
+                    logger.info(f"ошибка {e}")
             print(cou)
             
     except Exception as e:
