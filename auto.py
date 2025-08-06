@@ -172,7 +172,8 @@ async def main():
                 except Exception as e:
                     logger.info(f"ошибка {e}")
             print(cou)
-            await update_count(user['user_id'], cou)
+            b = await update_count(user['user_id'], cou)
+            logger.info(f"Обновлено {b}")
             
     except Exception as e:
         logger.error(f"Ошибка: {e}", exc_info=True)
