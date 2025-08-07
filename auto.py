@@ -118,6 +118,45 @@ async def send_vacanc(access_token, resume_id, vacancy_id):
 
     response = requests.post(url, headers=headers, files=files)
     return response
+
+async def update_count(user_id, count) -> tuple:
+    conn = None
+    try:
+        conn = await asyncpg.connect(
+            host="pg4.sweb.ru",
+            port=5433,
+            database="maksimarkh",
+            user="maksimarkh",
+            password="Maksim1232145!"
+        )
+        
+        # 1. Получаем текущее значение count из базы данных
+        current_count = await conn.fetchval(
+            "SELECT count FROM users WHERE user_id = $1",
+            str(user_id)
+        )
+        
+        # Если записи нет, current_count будет None, тогда устанавливаем 0
+        if current_count is None:
+            current_count = 0
+        
+        # 2. Вычисляем новое значение
+        new_count = current_count + int(count)
+        
+        # 3. Обновляем запись в базе данных
+        await conn.execute(
+            "UPDATE users SET count = $1 WHERE user_id = $2",
+            str(new_count), user_id
+        )
+        return {'message': "ok"}
+
+    except Exception as e:
+        print(f"Error in update_users: {e}")
+        return {'message': f"{e}"}
+    finally:
+        if conn:
+            await conn.close()
+            
 async def main():
     try:
         logger.info("Запуск рассылки...")
@@ -140,7 +179,8 @@ async def main():
                 except Exception as e:
                     logger.info(f"ошибка {e}")
             print(cou)
-            
+            a = await update_count(user['user_id'], cou)
+            logger.info(f"обновление бд удачно")
     except Exception as e:
         logger.error(f"Ошибка: {e}", exc_info=True)
 
