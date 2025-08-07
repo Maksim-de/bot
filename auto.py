@@ -146,7 +146,7 @@ async def update_count(user_id, count) -> tuple:
         # 3. Обновляем запись в базе данных
         await conn.execute(
             "UPDATE users SET count = $1 WHERE user_id = $2",
-            str(new_count), user_id
+            int(new_count), str(user_id)
         )
         return {'message': "ok"}
 
@@ -166,7 +166,7 @@ async def main():
             vacanc_for_user = await load_vacancies_for_send(user['new_category_auto'], user['location_auto'], user['experience_auto'])
             logger.info(f"Загружено вакансий {len(vacanc_for_user)}")
             cou = 0
-            for vacancy in vacanc_for_user[:50]:
+            for vacancy in vacanc_for_user[:60]:
                 try:
                     otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy['link'].split('/')[-1])
                     print(otvet)
@@ -186,6 +186,3 @@ async def main():
 
 if __name__ == "__main__":
     await main()
-
-
-
