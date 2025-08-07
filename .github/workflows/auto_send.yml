@@ -1,4 +1,4 @@
-name: Weekly Parser and Cleanup
+name: Auto send vacancies
 
 on:
   schedule:
