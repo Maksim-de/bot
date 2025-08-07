@@ -12,44 +12,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-async def update_count(user_id, count) -> tuple:
-    conn = None
-    try:
-        conn = await asyncpg.connect(
-            host="pg4.sweb.ru",
-            port=5433,
-            database="maksimarkh",
-            user="maksimarkh",
-            password="Maksim1232145!"
-        )
-        
-        # 1. Получаем текущее значение count из базы данных
-        current_count = await conn.fetchval(
-            "SELECT count FROM users WHERE user_id = $1",
-            str(user_id)
-        )
-        
-        # Если записи нет, current_count будет None, тогда устанавливаем 0
-        if current_count is None:
-            current_count = 0
-        
-        # 2. Вычисляем новое значение
-        new_count = current_count + int(count)
-        
-        # 3. Обновляем запись в базе данных
-        await conn.execute(
-            "UPDATE users SET count = $1 WHERE user_id = $2",
-            new_count, str(user_id)
-        )
-        return {'message': "ok"}
-
-    except Exception as e:
-        print(f"Error in update_users: {e}")
-        return {'message': f"{e}"}
-    finally:
-        if conn:
-            await conn.close()
-            
 async def get_users():
     conn = None
     try:
@@ -151,7 +113,7 @@ async def send_vacanc(access_token, resume_id, vacancy_id):
     files = {
         'vacancy_id': (None, str(vacancy_id)),
         'resume_id': (None, str(resume_id)),
-        'message': (None, 'Добрый день, заинтересовала вакансия. Предлагаю обсудить детали!')
+        'message': (None, 'Добрый день, заинтересовала вакансия.')
     }
 
     response = requests.post(url, headers=headers, files=files)
@@ -165,20 +127,25 @@ async def main():
             vacanc_for_user = await load_vacancies_for_send(user['new_category_auto'], user['location_auto'], user['experience_auto'])
             logger.info(f"Загружено вакансий {len(vacanc_for_user)}")
             cou = 0
-            for vacancy in vacanc_for_user[:25]:
+            for vacancy in vacanc_for_user[:50]:
                 try:
-                    otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy)
-                    cou +=1
+                    otvet = await send_vacanc(user['access_token'], user['resume_id'], vacancy['link'].split('/')[-1])
+                    print(otvet)
+                    print(otvet.text)
+                    if otvet:
+                        print('зашли')
+                        cou +=1
+                    if cou > 25:
+                        break
                 except Exception as e:
                     logger.info(f"ошибка {e}")
             print(cou)
-            b = await update_count(user['user_id'], cou)
-            logger.info(f"Обновлено {b}")
             
     except Exception as e:
         logger.error(f"Ошибка: {e}", exc_info=True)
 
 if __name__ == "__main__":
     await main()
+
 
 
