@@ -250,7 +250,7 @@ def hh_parsing():
                     break
                     
                 for item in data['items']:
-                    if (item['area']['name'] in priority_cities) and (item['alternate_url'] not in a_list_link):
+                    if (item['area']['name'] in priority_cities) and (item['alternate_url'] not in a_list_link) and ('1С' not in item['name']) and ('1C' not in item['name']):
                       vacancy = {
                           "title": item['name'],
                           "company": item['employer']['name'],
