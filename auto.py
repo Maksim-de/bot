@@ -24,7 +24,7 @@ async def get_users():
         )
         
         users = await conn.fetch(
-            "SELECT user_id, access_token, resume_id, new_category_auto, location_auto, experience_auto FROM users where resume_id is not Null and is_active_auto is True"
+            "SELECT user_id, access_token, resume_id, new_category_auto, location_auto, experience_auto FROM users where resume_id is not Null and is_active_auto is not False"
         )
 
         result = [dict(user) for user in users]
