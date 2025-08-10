@@ -1,7 +1,7 @@
 import asyncpg
 import requests
 
-
+import asyncio
 import logging
 import time
 
@@ -185,4 +185,5 @@ async def main():
         logger.error(f"Ошибка: {e}", exc_info=True)
 
 if __name__ == "__main__":
-    await main()
+
+    asyncio.run(main())
