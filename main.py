@@ -18,7 +18,7 @@ category_keywords = {
  "Аналитика": {
     "keywords": [
       "аналитик", 'systems_analyst', 'data_analyst', 'business_analyst', 'bi-аналитик', 'бизнес-аналитик', 'marketing_analyst',
-      'bi_developer', 'bi-аналитик, аналитик данных', 'cистемный аналитик', 'soc_analyst'
+      'bi_developer', 'bi-аналитик, аналитик данных', 'cистемный аналитик', 'soc_analyst', 'product_analyst'
     ],
     "subcategories": {
       "Системный аналитик": [
@@ -31,7 +31,7 @@ category_keywords = {
         'data_analyst', 'bi-аналитик', "bi_developer", 'bi-аналитик, аналитик данных'
       ],
       "Продуктовый аналитик": [
-        "продуктов", "product", "a/b", "ab test", "a/b test", 'продуктовый аналитик'
+        "продуктов", "product", "a/b", "ab test", "a/b test", 'продуктовый аналитик', 'product_analyst'
       ],
       "Аналитик DWH": [
         "data engineer", "dwh", "data warehouse", "airflow", "data lake",
