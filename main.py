@@ -134,12 +134,12 @@ category_keywords = {
 category_keywords_work = {
 
     "Аналитика": {
-        "keywords": ["аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
+        "keywords": ['product_analyst', "аналитик", "бизнес аналитик" "analyst", "аналитик данных", "data analyst", "бизнес-аналитик", "business analyst", "BI-аналитик", "BI analyst", "системный аналитик", "system analyst", "веб-аналитик", "web analyst"],
         "subcategories": {
             "Системный аналитик": ["системный", "system analyst", 'cистемный аналитик', 'systems', 'systems analyst', 'ystem'],
             "Бизнес аналитик": ["бизнес-аналитик", "business analyst", "аналитик процессов", "process analyst", "full stack", "бизнес"],
             "Data аналитик и BI": ["аналитик данных", "data", "данных", "bi", "аналитик отчетности", "data analytics specialist"],
-            "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "продуктовый"],
+            "Продуктовый аналитик": ["продуктовый аналитик", "product analyst", "продуктовый", 'product_analyst'],
             "Веб-аналитик": ["веб-аналитик", "web analyst", "google analytics analyst", "аналитик метрик", "аналитик трафика"],
             "Аналитик DWH": ["data engineer", "dwh", "data warehouse", "airflow", "data lake", "databricks", "spark", "hadoop", 'sql'],
             "Аналитик (Другое)": []
