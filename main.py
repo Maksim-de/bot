@@ -165,9 +165,9 @@ category_keywords_work = {
 }
 },
      "ML/AI/DS": {
-        "keywords": ["ml", "ai", 'ds', "data science", "дата-сайентист"],
+        "keywords": ["ml", "ai", 'ds', "data science", "дата-сайентист", 'data'],
          "subcategories": {
-            "Data Science": ["data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист', 'ds'],
+            "Data Science": ["data science", "анализ данн", "дата-сайентист", "data_scientist", 'дата-сайентист', 'ds', 'дата', 'data'],
             "ML Engineering": ["engineer", "ml-engineer", "mlops", "model serving"],
        "AI (Другое)": []
 }
@@ -289,7 +289,7 @@ def classify_vacancy(vacancy_type, title):
     title = title.lower()
     
     # Сначала проверяем по заголовку, если тип вакансии подходящий
-    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик', 'аналитика', 'разработка, программирование', 'системный аналитик']:
+    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик', 'аналитика', 'разработка, программирование', 'системный аналитик', 'дата-сайентист']:
         # Проверяем категории по заголовку
         for category in a_list:
             for keyword in category_keywords_work[category]['keywords']:
