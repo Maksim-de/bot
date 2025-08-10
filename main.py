@@ -289,7 +289,7 @@ def classify_vacancy(vacancy_type, title):
     title = title.lower()
     
     # Сначала проверяем по заголовку, если тип вакансии подходящий
-    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик', 'аналитика', 'разработка, программирование']:
+    if vacancy_type in ['аналитик', 'программист, разработчик', 'тестировщик', 'аналитика', 'разработка, программирование', 'системный аналитик']:
         # Проверяем категории по заголовку
         for category in a_list:
             for keyword in category_keywords_work[category]['keywords']:
