@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests psycopg2-binary python-dotenv
+          pip install requests psycopg2-binary python-dotenv asyncpg
           
       - name: Auto send vacancies
         run: python auto.py
